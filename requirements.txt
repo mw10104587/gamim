@@ -8,9 +8,9 @@ MySQL-python==1.2.3
 #PAM==0.4.2
 Pillow==2.0.0
 PyYAML==3.10
-Twisted-Core==12.3.0
-Twisted-Names==12.3.0
-Twisted-Web==12.3.0
+#Twisted-Core==12.3.0
+#Twisted-Names==12.3.0
+#Twisted-Web==12.3.0
 Werkzeug==0.9.4
 adium-theme-ubuntu==0.3.3
 altgraph==0.10.2
