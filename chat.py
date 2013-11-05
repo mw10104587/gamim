@@ -77,6 +77,7 @@ def inbox(ws):
         # Sleep to prevent *contstant* context-switches.
         gevent.sleep(0.1)
         message = ws.receive()
+	message = message + str( getLengthOfMessage(message) )
 
         if message:
             app.logger.info(u'Inserting message: {}'.format(message))
@@ -92,4 +93,7 @@ def outbox(ws):
         gevent.sleep()
 
 
+
+def getLengthOfMessage(message):
+    return len(message);
 
