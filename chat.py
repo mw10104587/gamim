@@ -119,9 +119,8 @@ def outbox(ws):
 
 def getLengthOfMessage(message):
     
-       
- 
-    #decoded = json.loads(message)
+    decoded = json.loads(message)
+    print decoded
     #print "decoded = "
     #print decoded['text']
 

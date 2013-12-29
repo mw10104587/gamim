@@ -5,7 +5,22 @@ inbox.onmessage = function(message) {
   console.log(message);
   var data = JSON.parse(message.data);
   console.log( data.length );
-  $("#chat-text").append("<div class='panel panel-default'><div class='panel-heading'>" + $('<span/>').text(data.handle).html() + "</div><div class='panel-body'>" + $('<span/>').text(data.text + "  --> length = " + data.length).html() + "</div></div>");
+  var name = data.handle;
+  var content = data.text;
+
+  //our own text
+  if ( $("#input-handle")[0].value = name ) {
+  
+    $("#chat-text").append("<div class='panel panel-default words my-words'><div class='panel-body'>" + $('<span/>').text(data.text + "  --> length = " + data.length).html() + "</div></div>");   
+
+  }
+  else{
+
+     $("#chat-text").append("<div class='panel panel-default words his-words'><div class='panel-body'>" + $('<span/>').text(data.text + "  --> length = " + data.length).html() + "</div></div>");
+
+  }
+
+  
   $("#chat-text").stop().animate({
     scrollTop: $('#chat-text')[0].scrollHeight
   }, 800);
