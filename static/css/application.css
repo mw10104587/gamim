@@ -1,6 +1,7 @@
 #chat-text {
   overflow: auto;
   height: 500px;
+  background-color: black;
 }
 
 #input-form{
@@ -53,7 +54,7 @@
 	border-right-width:10px; /* vary this value to change the angle of the vertex */
 	border-bottom-width:20px; /* vary this value to change the height of the triangle. must be equal to the corresponding value in :before */
 	border-style:solid;
-	border-color:transparent #fff;
+	border-color:transparent black;
     /* reduce the damage in FF3.0 */
     display:block; 
     width:0;
