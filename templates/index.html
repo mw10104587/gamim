@@ -5,11 +5,12 @@
     <link href="static/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="static/css/application.css" rel="stylesheet" media="screen">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   </head>
   <body>
     <div class="container">
       <div class="jumbotron">
-        <h1>Emotion Instant Messenger</h1>
+        <h1>GamIM messenger</h1>
         <hr />
         <p>Prototype XDDDDDD</p>
 
@@ -23,12 +24,22 @@
       <div class="page-header">
         <h1>Chat Log</h1>
       </div>
+
+      <div id="input-name-form">
+         <div class="input-group" style="width: 250px;">
+            <input id="input-name" type="text" class="form-control" placeholder="Enter name" >
+            <div class="input-group-btn">
+              <button id="name-confirm-btn" type="button" class="btn btn-default" onclick="nameConfirm()">Confirm</button>
+            </div>
+          </div>
+      </div>
+
       <div id="chat-text">
       </div>
 
       <form id="input-form" class="form-inline">
         <div class="form-group">
-          <input id="input-handle" type="text" class="form-control" placeholder="Enter name" autofocus />
+          <!--input id="input-handle" type="text" class="form-control" placeholder="Enter name" autofocus /-->
         </div>
         <div class="form-group">
           <input id="input-text" type="text" class="form-control" placeholder="Enter chat text here!" autofocus />

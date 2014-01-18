@@ -1,3 +1,5 @@
+
+
 var inbox = new ReconnectingWebSocket("ws://"+ location.host + "/receive");
 var outbox = new ReconnectingWebSocket("ws://"+ location.host + "/submit");
 
@@ -9,9 +11,9 @@ inbox.onmessage = function(message) {
   var content = data.text;
 
   //our own text
-  if ( $("#input-handle")[0].value = name ) {
+  if ( $("#input-name")[0].value = name ) {
   
-    $("#chat-text").append("<div class='panel panel-default words my-words'><div class='panel-body'>" + $('<span/>').text(data.text + "  --> length = " + data.length).html() + "</div></div>");   
+    $("#chat-text").append("<div class='panel panel-default bubble-span'><div class='words my-words'><div class='panel-body'>" + $('<span/>').text(data.text + "  --> length = " + data.length).html() + "</div></div></div>");   
 
   }
   else{
@@ -39,10 +41,31 @@ outbox.onclose = function(){
 
 $("#input-form").on("submit", function(event) {
   event.preventDefault();
-  var handle = $("#input-handle")[0].value;
+  var handle = $("#input-name")[0].value;
   var text   = $("#input-text")[0].value;
   var stringifyText = JSON.stringify({handle: handle, text: text} );
   outbox.send(JSON.stringify({ handle: handle, text: text }));
   $("#input-text")[0].value = "";
   console.log(stringifyText);
 });
+
+//called when button pressed,
+//change the input
+//change the button
+function nameConfirm(){
+
+    if(!$("#input-name").prop('readonly')) {
+        $("#input-name").prop('readonly', true);
+        $("#name-confirm-btn").html("Reset");    
+    }
+    else{
+        $("#input-name").prop('readonly', false);
+        $("#name-confirm-btn").html("Confirm");
+    }
+    
+    //if($("#input-name").attr('readonly')) console.log("test2");
+
+    //$("#input-name").attr('readonly', false);
+    
+
+}
