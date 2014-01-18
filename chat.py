@@ -16,9 +16,9 @@ import gevent
 from flask import Flask, render_template
 from flask_sockets import Sockets
 
-#import nltk.classify.util
-#from nltk.classify import NaiveBayesClassifier
-#from nltk.corpus import movie_reviews
+import nltk.classify.util
+from nltk.classify import NaiveBayesClassifier
+from nltk.corpus import movie_reviews
 #from nltk.tag import pos_tag
 #from nltk.corpus import PlaintextCorpusReader
 #from nltk.corpus.reader.util import StreamBackedCorpusView

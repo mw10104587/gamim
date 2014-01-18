@@ -11,7 +11,7 @@ inbox.onmessage = function(message) {
   var content = data.text;
 
   //our own text
-  if ( $("#input-name")[0].value = name ) {
+  if ( $("#input-name")[0].value == name ) {
   
     $("#chat-text").append("<div class='panel panel-default bubble-span'><div class='words my-words'><div class='panel-body'>" + $('<span/>').text(data.text + "  --> length = " + data.length).html() + "</div></div></div>");   
 
