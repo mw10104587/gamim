@@ -99,7 +99,7 @@ def inbox(ws):
 	sys.stdout.flush()
 	
         if message:
-	    message = message.replace("}", ',\"' + 'length\":\"' + str( getLengthOfMessage(message) )+ '\"' + '}' )
+	    #message = message.replace("}", ',\"' + 'length\":\"' + str( getLengthOfMessage(message) )+ '\"' + '}' )
 	    print "message after modification is: " + message           
 	    sys.stdout.flush()
 	    app.logger.info(u'Inserting message: {}'.format(message))
