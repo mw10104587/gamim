@@ -12,9 +12,19 @@ inbox.onmessage = function(message) {
 
   //our own text
   if ( $("#input-name")[0].value == name ) {
-  
-    $("#chat-text").append("<div class='panel panel-default bubble-span'><div class='words my-words'><div class='panel-body'>" + $('<span/>').text(data.text + "  --> length = " + data.length).html() + "</div></div></div>");   
+    var emotionRangeClassString = ""
+    if (data.neg > 0.75 ) 
+      emotionRangeClassString = "rg-1"
+    if (data.neg > 0.5 && data.neg < 0.75)
+      emotionRangeClassString = "rg-2"
+    if (data.neg > 0.25 && data.neg < 0.5)
+      emotionRangeClassString = "rg-3"
+    if (data.neg > 0 && data.neg < 0.25)
+      emotionRangeClassString = "rg-4"
 
+    $("#chat-text").append("<div class='panel panel-default bubble-span'><div class='words my-words "+emotionRangeClassString+"'" + "><div class='panel-body'>" + $('<span/>').text(data.text + "  --> length = " + data.length + ", value of neg = " + data.neg ).html() + "</div></div></div>");   
+    console.log("the neg value = ");
+    console.log(data.neg);
   }
   else{
 

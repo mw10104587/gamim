@@ -31,7 +31,7 @@ position: relative;
 width: 250px;
 height: 120px;
 padding: 3px;
-background: #F5F900;
+/*background: #F5F900;*/
 border: #7E7F7F solid 4px;
 -webkit-border-radius: 10px;
 -moz-border-radius: 10px;
@@ -127,3 +127,12 @@ z-index: 0;
     width:0;
 }
 
+
+/* start from most neg to more pos */
+.rg-1{ background-color: black; }
+
+.rg-2{ background-color: red; }
+
+.rg-3{ background-color: blue;}
+
+.rg-4{ background-color: white;}

@@ -32,13 +32,17 @@ classifier1Pickle.close()
 def word_feats(words):
     return dict([(word, True) for word in words])
 
-def getEmotionValue(theString):
-    samples = classifier1.prob_classify(testNegFeat )
-    print samples
-    print samples.samples()
-    print samples.prob("pos")
-    print samples.prob("neg")
-    return [samples.prob("pos"), samples.prob("neg")]
+def getNegEmotionValue(theString):
+    samples = classifier1.prob_classify( word_feats( theString.split() ) )
+    #print samples
+    #print samples.samples()
+    #print samples.prob("neg")
+    return samples.prob("neg")
+
+def getPosEmotionValue(theString):
+    samples = classifier1.prob_classify( word_feats( theString.split() ))
+    return samples.prob("pos")
+
 
 def myClassify(chat):
     return classifier1.classify(word_feats( chat.split() ))
@@ -120,8 +124,8 @@ def inbox(ws):
         if message:
             #message = message.replace("}", ',\"' + 'length\":\"' + str( getLengthOfMessage(message) )+ '\"' + '}' )
             jsonMessage = json.loads(message)
-
-            message = message.replace("}", ',\"' + 'length\":\"' + str( myClassify(jsonMessage["text"]) )+ '\"' + '}' )
+            message = message.replace("}", ',\"' + 'length\":\"' + str( myClassify(jsonMessage["text"]) )+ '\"' + ',\"' + 'neg\":\"' + str(getNegEmotionValue(jsonMessage["text"])) + '\"' + '}' )
+            
             #print "message after modification is: " + message
             sys.stdout.flush()
             app.logger.info(u'Inserting message: {}'.format(message))
