@@ -16,13 +16,32 @@ import gevent
 from flask import Flask, render_template
 from flask_sockets import Sockets
 
-#import nltk.classify.util
-#from nltk.classify import NaiveBayesClassifier
+import nltk.classify.util
+from nltk.classify import NaiveBayesClassifier
 #from nltk.corpus import movie_reviews
 #from nltk.tag import pos_tag
 #from nltk.corpus import PlaintextCorpusReader
 #from nltk.corpus.reader.util import StreamBackedCorpusView
-#import pickle
+import pickle
+import json
+
+classifier1Pickle = open('classifier_movie_review.pickle','r')
+classifier1 = pickle.load(classifier1Pickle)
+classifier1Pickle.close()
+
+def word_feats(words):
+    return dict([(word, True) for word in words])
+
+def getEmotionValue(theString):
+    samples = classifier1.prob_classify(testNegFeat )
+    print samples
+    print samples.samples()
+    print samples.prob("pos")
+    print samples.prob("neg")
+    return [samples.prob("pos"), samples.prob("neg")]
+
+def myClassify(chat):
+    return classifier1.classify(word_feats( chat.split() ))
 
 
 REDIS_URL = os.environ['REDISCLOUD_URL']
@@ -94,16 +113,19 @@ def inbox(ws):
         # Sleep to prevent *contstant* context-switches.
         gevent.sleep(0.1)
         message = ws.receive()
-	#message = message + str( getLengthOfMessage(message) )
-	print message
-	sys.stdout.flush()
+        #message = message + str( getLengthOfMessage(message) )
+        print message
+        sys.stdout.flush()
 	
         if message:
-	    #message = message.replace("}", ',\"' + 'length\":\"' + str( getLengthOfMessage(message) )+ '\"' + '}' )
-	    print "message after modification is: " + message           
-	    sys.stdout.flush()
-	    app.logger.info(u'Inserting message: {}'.format(message))
-	    #post the message to given channel
+            #message = message.replace("}", ',\"' + 'length\":\"' + str( getLengthOfMessage(message) )+ '\"' + '}' )
+            jsonMessage = json.loads(message)
+
+            message = message.replace("}", ',\"' + 'length\":\"' + str( myClassify(jsonMessage["text"]) )+ '\"' + '}' )
+            #print "message after modification is: " + message
+            sys.stdout.flush()
+            app.logger.info(u'Inserting message: {}'.format(message))
+            #post the message to given channel
             redis.publish(REDIS_CHAN, message)
 
 @sockets.route('/receive')
