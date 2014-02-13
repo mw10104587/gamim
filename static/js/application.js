@@ -23,14 +23,14 @@ inbox.onmessage = function(message) {
   //our own text
   if ( $("#input-name")[0].value == name ) {
     
-    $("#chat-text").append("<div class='panel panel-default bubble-span'><div class='words my-words "+emotionRangeClassString+"'" + "><div class='panel-body'>" + $('<span/>').text(data.text + "  --> length = " + data.length + ", value of neg = " + data.neg ).html() + "</div></div></div>");   
+    $("#chat-text").append("<div class='panel panel-default bubble-span'><div class='words my-words "+emotionRangeClassString+"'" + "><div class='panel-body white-text'>" + $('<span/>').text(data.text + "  --> length = " + data.length + ", value of neg = " + data.neg ).html() + "</div></div></div>");   
     console.log("the neg value = ");
     console.log(data.neg);
   }
   //other's chat content
   else{
 
-     $("#chat-text").append("<div class='panel panel-default bubble-span'><div class='words his-words "+emotionRangeClassString+"'" + "><div class='panel-body'>" + $('<span/>').text(data.text + "  --> length = " + data.length + ", value of neg = " + data.neg ).html() + "</div></div></div>");
+     $("#chat-text").append("<div class='panel panel-default bubble-span'><div class='words his-words "+emotionRangeClassString+"'" + "><div class='panel-body white-text'>" + $('<span/>').text(data.text + "  --> length = " + data.length + ", value of neg = " + data.neg ).html() + "</div></div></div>");
 
   }
 
