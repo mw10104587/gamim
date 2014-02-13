@@ -11,11 +11,11 @@ inbox.onmessage = function(message) {
   var emotionRangeClassString = ""
     if (data.neg > 0.75 ) 
       emotionRangeClassString = "rg-1"
-    if (data.neg > 0.5 && data.neg < 0.75)
+    if (data.neg >= 0.5 && data.neg < 0.75)
       emotionRangeClassString = "rg-2"
-    if (data.neg > 0.25 && data.neg < 0.5)
+    if (data.neg >= 0.25 && data.neg < 0.5)
       emotionRangeClassString = "rg-3"
-    if (data.neg > 0 && data.neg < 0.25)
+    if (data.neg >= 0 && data.neg < 0.25)
       emotionRangeClassString = "rg-4"
 
   //our own text
@@ -50,6 +50,11 @@ outbox.onclose = function(){
 };
 
 $("#input-form").on("submit", function(event) {
+
+  if ( $("#input-name").val() == ""){
+    alert("Type your name!!");
+    return
+  }
   event.preventDefault();
   var handle = $("#input-name")[0].value;
   var text   = $("#input-text")[0].value;
@@ -73,9 +78,4 @@ function nameConfirm(){
         $("#name-confirm-btn").html("Confirm");
     }
     
-    //if($("#input-name").attr('readonly')) console.log("test2");
-
-    //$("#input-name").attr('readonly', false);
-    
-
 }
