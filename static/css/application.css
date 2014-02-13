@@ -35,7 +35,6 @@ position: relative;
 width: 250px;
 height: 120px;
 padding: 3px;
-/*background: #F5F900;*/
 border: #7E7F7F solid 4px;
 -webkit-border-radius: 10px;
 -moz-border-radius: 10px;
@@ -78,57 +77,47 @@ z-index: 0;
 
 }
 
-.his-words{
-  
-  width: 200px;
-  float: left;
-  background-color: orange;
-  background-color: blue;
-  position:relative;
-  padding:15px;
-  margin:1em 0 3em;
-  color:#fff;
-  background:#c81e2b;
-  /* css3 */
-  background:-webkit-gradient(linear, 0 0, 0 100%, from(#f04349), to(#c81e2b));
-  background:-moz-linear-gradient(#f04349, #c81e2b);
-  background:-o-linear-gradient(#f04349, #c81e2b);
-  background:linear-gradient(#f04349, #c81e2b);
-  -webkit-border-radius:10px;
-  -moz-border-radius:10px;
-  border-radius:10px;
+.his-words
+{
+
+margin-left: 25px;
+position: relative;
+width: 250px;
+height: 120px;
+padding: 0px;
+background: #000000;
+border: #7F7F7F solid 4px;
+-webkit-border-radius: 10px;
+-moz-border-radius: 10px;
+border-radius: 10px;
 }
 
-* creates the wider right-angled triangle */
-.his-words:before {
-  content:"";
-  position:absolute;
-  bottom:-20px; /* value = - border-top-width - border-bottom-width */
-  left:60px; /* controls horizontal position */
-  border:0;
-  border-left-width:30px; /* vary this value to change the angle of the vertex */
-  border-bottom-width:30px; /* vary this value to change the height of the triangle. must be equal to the corresponding value in :after */
-  border-style:solid;
-  border-color:transparent #c81e2b;
-  /* reduce the damage in FF3.0 */
-  display:block; 
-  width:0;
+.his-words:after 
+{
+content: "";
+position: absolute;
+top: 45px;
+left: -15px;
+border-style: solid;
+border-width: 15px 15px 15px 0;
+border-color: transparent #000000;
+display: block;
+width: 0;
+z-index: 1;
 }
 
-/* creates the narrower right-angled triangle */
-.his-words:after {
-	content:"";
-	position:absolute;
-	bottom:-20px; /* value = - border-top-width - border-bottom-width */
-	left:80px; /* value = (:before's left) + (:before's border-right/left-width)  - (:after's border-right/left-width) */
-	border:0;
-	border-right-width:10px; /* vary this value to change the angle of the vertex */
-	border-bottom-width:20px; /* vary this value to change the height of the triangle. must be equal to the corresponding value in :before */
-	border-style:solid;
-	border-color:transparent #fff;
-    /* reduce the damage in FF3.0 */
-    display:block; 
-    width:0;
+.his-words:before 
+{
+content: "";
+position: absolute;
+top: 42px;
+left: -21px;
+border-style: solid;
+border-width: 18px 18px 18px 0;
+border-color: transparent #7F7F7F;
+display: block;
+width: 0;
+z-index: 0;
 }
 
 

@@ -10,9 +10,7 @@ inbox.onmessage = function(message) {
   var name = data.handle;
   var content = data.text;
 
-  //our own text
-  if ( $("#input-name")[0].value == name ) {
-    var emotionRangeClassString = ""
+  var emotionRangeClassString = ""
     if (data.neg > 0.75 ) 
       emotionRangeClassString = "rg-1"
     if (data.neg > 0.5 && data.neg < 0.75)
@@ -22,13 +20,17 @@ inbox.onmessage = function(message) {
     if (data.neg > 0 && data.neg < 0.25)
       emotionRangeClassString = "rg-4"
 
+  //our own text
+  if ( $("#input-name")[0].value == name ) {
+    
     $("#chat-text").append("<div class='panel panel-default bubble-span'><div class='words my-words "+emotionRangeClassString+"'" + "><div class='panel-body'>" + $('<span/>').text(data.text + "  --> length = " + data.length + ", value of neg = " + data.neg ).html() + "</div></div></div>");   
     console.log("the neg value = ");
     console.log(data.neg);
   }
+  //other's chat content
   else{
 
-     $("#chat-text").append("<div class='panel panel-default words his-words'><div class='panel-body'>" + $('<span/>').text(data.text + "  --> length = " + data.length).html() + "</div></div>");
+     $("#chat-text").append("<div class='panel panel-default bubble-span'><div class='words his-words "+emotionRangeClassString+"'" + "><div class='panel-body'>" + $('<span/>').text(data.text + "  --> length = " + data.length + ", value of neg = " + data.neg ).html() + "</div></div></div>");
 
   }
 
