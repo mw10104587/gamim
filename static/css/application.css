@@ -29,7 +29,7 @@
 .my-words 
 {
 
-/*float: right;*/
+float: right;
 margin-right: 25px;
 position: relative;
 width: 250px;
@@ -71,12 +71,10 @@ z-index: 0;
 
 .
 
-.bubble-span{
-  
-  background-color: black;
-  height: 122px;
-  border-color: black;
-
+.bubble-span-panel{  
+background-color: black;
+height: 122px;
+border-color: black;
 }
 
 .his-words
