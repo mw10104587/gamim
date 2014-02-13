@@ -69,9 +69,10 @@ width: 0;
 z-index: 0;
 }
 
-.
+
 
 .bubble-span-panel{  
+margin-top: 10px;
 background-color: black;
 height: 122px;
 border-color: black;
@@ -99,7 +100,7 @@ position: absolute;
 top: 45px;
 left: -15px;
 border-style: solid;
-border-width: 15px 15px 15px 0;
+border-width: 15px 16px 15px 0;
 border-color: transparent #000000;
 display: block;
 width: 0;
