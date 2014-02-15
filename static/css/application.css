@@ -1,7 +1,37 @@
+.header-box{
+  padding: 10px;
+  padding-right: 30px;
+  padding-left: 30px;
+  margin-bottom: 20px;
+  font-size: 21px;
+  font-weight: 200;
+  line-height: 2.1428571435;
+  color: inherit;
+  background-color: #eee;
+}
+
+.lh{
+  line-height: 0.8;
+}
+
 #chat-text {
   overflow: auto;
   height: 500px;
-  background-color: black;
+  /*background-color: black;*/
+  background-image: -webkit-gradient(
+    linear,
+    left top,
+    left bottom,
+    color-stop(0.22, #282829),
+    color-stop(0.22, #282829),
+    color-stop(0.61, #616163),
+    color-stop(1, #8A8C8F)
+  );
+  background-image: -o-linear-gradient(bottom, #282829 22%, #282829 22%, #616163 61%, #8A8C8F 100%);
+  background-image: -moz-linear-gradient(bottom, #282829 22%, #282829 22%, #616163 61%, #8A8C8F 100%);
+  background-image: -webkit-linear-gradient(bottom, #282829 22%, #282829 22%, #616163 61%, #8A8C8F 100%);
+  background-image: -ms-linear-gradient(bottom, #282829 22%, #282829 22%, #616163 61%, #8A8C8F 100%);
+  background-image: linear-gradient(to bottom, #282829 22%, #282829 22%, #616163 61%, #8A8C8F 100%);
 }
 
 #input-name-form{
