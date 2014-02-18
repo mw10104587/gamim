@@ -53,7 +53,17 @@
 }
 
 #input-text{width: 80%; float: left;}
-#input-text-btn{width: 20%;}
+#input-text-btn{
+  width: 100%;
+  background-color: #f1848d;
+  border-color: #a9a8a9;
+}
+.btn-wrapper{
+  float: left;
+  width: 20%;
+  padding-left: 6px;
+  height: 34px;
+}
 
 
 .my-words 
@@ -155,19 +165,47 @@ z-index: 0;
 
 /* start from most neg to more pos */
 .rg-1{ border-color: black; }
-.rg-1:before{border-color: transparent black }
-.rg-1:after{border-color: transparent black}
+.rg-1:before{border-color: transparent black ;}
+.rg-1:after{border-color: transparent black;}
 
 .rg-2{ border-color: red; }
-.rg-2:before{ border-color: transparent red}
-.rg-2:after{ border-color: transparent black}
+.rg-2:before{ border-color: transparent red;}
+.rg-2:after{ border-color: transparent black;}
 
-.rg-3{ border-color: blue;}
-.rg-3:before{border-color: transparent blue}
-.rg-3:after{border-color: transparent black}
+.rg-3{ border-color: #919191;}
+.rg-3:before{border-color: transparent #919191;}
+.rg-3:after{border-color: transparent black;}
 
-.rg-4{ border-color: white;}
-.rg-4:before{border-color: transparent white}
-.rg-4:after{border-color: transparent black  }
+.rg-4{ border-color: #660000;}
+.rg-4:before{border-color: transparent #660000;}
+.rg-4:after{border-color: transparent black;}
+
+.rg-5{ border-color: #f8651d;}
+.rg-5:before{border-color: transparent #f8651d;}
+.rg-5:after{border-color: transparent black;}
+
+.rg-6{ border-color: #6240a1;}
+.rg-6:before{border-color: transparent #6240a1;}
+.rg-6:after{border-color: transparent black;}
+
+.rg-7{ border-color: #f9659b;}
+.rg-7:before{border-color: transparent #f9659b;}
+.rg-7:after{border-color: transparent black;}
+
+.rg-8{ border-color: #fbfe32;}
+.rg-8:before{border-color: transparent #fbfe32;}
+.rg-8:after{border-color: transparent black;}
+
+.rg-9{ border-color: #3302fb;}
+.rg-9:before{border-color: transparent #3302fb}
+.rg-9:after{border-color: transparent black  }
+
+.rg-10{ border-color: #30cf31;}
+.rg-10:before{border-color: transparent #30cf31;}
+.rg-10:after{border-color: transparent black;}
+
+.rg-11{ border-color: white;}
+.rg-11:before{border-color: transparent white}
+.rg-11:after{border-color: transparent black;}
 
 .white-text{color: white;}

@@ -4,19 +4,48 @@ var outbox = new ReconnectingWebSocket("ws://"+ location.host + "/submit");
 inbox.onmessage = function(message) {
   console.log(message);
   var data = JSON.parse(message.data);
-  console.log( data.length );
+  //console.log( data.length );
   var name = data.handle;
   var content = data.text;
+  var textLength = parseInt(data.length);
+  console.log(textLength);
+ 
+  negP = parseFloat(data.neg);
+  console.log(data.neg);
+/*console.log("********************");
+  console.log(negP);
+  console.log(negP > 0 && negP < 1%11);
+  console.log(negP > 0);
+  console.log(negP < 1%11);
+  console.log( (1%11) ) ;
+  console.log( 1/11 );
+  console.log("*********************");
+*/
 
   var emotionRangeClassString = ""
-    if (data.neg > 0.75 ) 
-      emotionRangeClassString = "rg-1"
-    if (data.neg >= 0.5 && data.neg < 0.75)
-      emotionRangeClassString = "rg-2"
-    if (data.neg >= 0.25 && data.neg < 0.5)
-      emotionRangeClassString = "rg-3"
-    if (data.neg >= 0 && data.neg < 0.25)
-      emotionRangeClassString = "rg-4"
+    if (     negP > 0     && negP < 1/11 )  
+      emotionRangeClassString = "rg-11";
+    else if (negP >= 1/11 && negP < 2/11)
+      emotionRangeClassString = "rg-10";
+    else if (negP >= 2/11 && negP < 3/11)
+      emotionRangeClassString = "rg-9";
+    else if (negP >= 3/11 && negP < 4/11)
+      emotionRangeClassString = "rg-8";
+    else if (negP >= 4/11 && negP < 5/11)
+      emotionRangeClassString = "rg-7";
+    else if (negP >= 5/11 && negP < 6/11)
+      emotionRangeClassString = "rg-6";
+    else if (negP >= 6/11 && negP < 7/11)
+      emotionRangeClassString = "rg-5";
+    else if (negP >= 7/11 && negP < 8/11)
+      emotionRangeClassString = "rg-4";
+    else if (negP >= 8/11 && negP < 9/11)
+      emotionRangeClassString = "rg-3";
+    else if (negP >= 9/11 && negP < 10/11)
+      emotionRangeClassString = "rg-2";
+    else if (negP >= 10/11 && negP <= 1)
+      emotionRangeClassString = "rg-1";
+
 
   //our own text
   if ( $("#input-name")[0].value == name ) {

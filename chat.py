@@ -29,8 +29,10 @@ classifier1Pickle = open('classifier_movie_review.pickle','r')
 classifier1 = pickle.load(classifier1Pickle)
 classifier1Pickle.close()
 
+
 def word_feats(words):
     return dict([(word, True) for word in words])
+
 
 def getNegEmotionValue(theString):
     samples = classifier1.prob_classify( word_feats( theString.split() ) )
@@ -124,7 +126,9 @@ def inbox(ws):
         if message:
             #message = message.replace("}", ',\"' + 'length\":\"' + str( getLengthOfMessage(message) )+ '\"' + '}' )
             jsonMessage = json.loads(message)
-            message = message.replace("}", ',\"' + 'length\":\"' + str( myClassify(jsonMessage["text"]) )+ '\"' + ',\"' + 'neg\":\"' + str(getNegEmotionValue(jsonMessage["text"])) + '\"' + '}' )
+            print "length of message function"
+            print getLengthOfMessage(message)
+            message = message.replace("}", ',\"' + 'length\":\"' + str( getLengthOfMessage(message) )+ '\"' + ',\"' + 'neg\":\"' + str(getNegEmotionValue(jsonMessage["text"])) + '\"' + ',\"' + 'pos\":\"' + str(getPosEmotionValue(jsonMessage["text"])) + '\"' + '}' )
             
             #print "message after modification is: " + message
             sys.stdout.flush()
@@ -147,9 +151,12 @@ def getLengthOfMessage(message):
     
     decoded = json.loads(message)
     print decoded
+    print decoded["text"].__class__.__name__
+    print len( decoded["text"].split(" ") )
+
     #print "decoded = "
     #print decoded['text']
     #f = open("")
-    return len( decoded['text'] )
+    return len( decoded['text'].split(" ") )
 
 
