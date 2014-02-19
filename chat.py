@@ -157,6 +157,6 @@ def getLengthOfMessage(message):
     #print "decoded = "
     #print decoded['text']
     #f = open("")
-    return len( decoded['text'].split(" ") )
+    return len( decoded['text'] )
 
 
