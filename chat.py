@@ -18,13 +18,11 @@ from flask_sockets import Sockets
 
 import nltk.classify.util
 from nltk.classify import NaiveBayesClassifier
-#from nltk.corpus import movie_reviews
-#from nltk.tag import pos_tag
-#from nltk.corpus import PlaintextCorpusReader
-#from nltk.corpus.reader.util import StreamBackedCorpusView
 import pickle
 import json
 
+
+#load the saved NLTK Classifier.
 classifier1Pickle = open('classifier_movie_review.pickle','r')
 classifier1 = pickle.load(classifier1Pickle)
 classifier1Pickle.close()
@@ -103,9 +101,6 @@ class ChatBackend(object):
 chats = ChatBackend()
 chats.start()
 
-#f= open('emotion_classifier.pickle')
-#classifier = pickle.load(f)
-#f.close()
 
 
 @app.route('/')
@@ -146,17 +141,9 @@ def outbox(ws):
         gevent.sleep()
 
 
-
-def getLengthOfMessage(message):
-    
+# get number of characters.
+def getLengthOfMessage(message):    
     decoded = json.loads(message)
-    print decoded
-    print decoded["text"].__class__.__name__
-    print len( decoded["text"].split(" ") )
-
-    #print "decoded = "
-    #print decoded['text']
-    #f = open("")
     return len( decoded['text'] )
 
 

@@ -1,16 +1,17 @@
 var inbox = new ReconnectingWebSocket("ws://"+ location.host + "/receive");
 var outbox = new ReconnectingWebSocket("ws://"+ location.host + "/submit");
 
+//receiving a message
+//get data and show in chat box
 inbox.onmessage = function(message) {
   console.log(message);
   var data = JSON.parse(message.data);
-  //console.log( data.length );
   var name = data.handle;
   var content = data.text;
   var textLength = parseInt(data.length);
   console.log(textLength);
  
-  negP = parseFloat(data.neg);
+  var negP = parseFloat(data.neg);
   console.log(data.neg);
 
   var emotionRangeClassString = ""
@@ -42,8 +43,8 @@ inbox.onmessage = function(message) {
   if ( $("#input-name")[0].value == name ) {
     
     $("#chat-text").append("<div class='bubble-span-panel'><div class='words my-words "+emotionRangeClassString+"'" + "><div class='panel-body white-text'>" + $('<span/>').text(data.text + "  --> # of bubbles = " + data.length + ", value of neg = " + data.neg + ", value of pos = " + data.pos ).html() + "</div></div></div>");   
-    console.log("the neg value = ");
-    console.log(data.neg);
+    //console.log("the neg value = ");
+    //console.log(data.neg);
   }
   //other's chat content
   else{
