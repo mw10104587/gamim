@@ -1,3 +1,4 @@
+//hostname which is emotion-chat-v1.herokuapp
 var inbox = new ReconnectingWebSocket("ws://"+ location.host + "/receive");
 var outbox = new ReconnectingWebSocket("ws://"+ location.host + "/submit");
 
@@ -39,14 +40,13 @@ inbox.onmessage = function(message) {
       emotionRangeClassString = "rg-1";
 
 
-  //our own text
+  //if it's the content we entered
   if ( $("#input-name")[0].value == name ) {
     
     $("#chat-text").append("<div class='bubble-span-panel'><div class='words my-words "+emotionRangeClassString+"'" + "><div class='panel-body white-text'>" + $('<span/>').text(data.text + "  --> # of bubbles = " + data.length + ", value of neg = " + data.neg + ", value of pos = " + data.pos ).html() + "</div></div></div>");   
-    //console.log("the neg value = ");
-    //console.log(data.neg);
+    
   }
-  //other's chat content
+  //if it's the content other people entered
   else{
 
      $("#chat-text").append("<div class='bubble-span-panel'><div class='words his-words "+emotionRangeClassString+"'" + "><div class='panel-body white-text'>" + $('<span/>').text(data.text + "  --> # of bubbles = " + data.length + ", value of neg = " + data.neg + ", value of pos = " + data.pos ).html() + "</div></div></div>");
@@ -70,6 +70,8 @@ outbox.onclose = function(){
     this.outbox = new WebSocket(outbox.url);
 };
 
+
+//send message to server when submit button pressed.
 $("#input-form").on("submit", function(event) {
 
   if ( $("#input-name").val() == ""){
@@ -79,13 +81,14 @@ $("#input-form").on("submit", function(event) {
   event.preventDefault();
   var handle = $("#input-name")[0].value;
   var text   = $("#input-text")[0].value;
-  var stringifyText = JSON.stringify({handle: handle, text: text} );
+
+  //we stringify it because it only support string.
   outbox.send(JSON.stringify({ handle: handle, text: text }));
   $("#input-text")[0].value = "";
   console.log(stringifyText);
 });
 
-//called when button pressed,
+//called when confirm button pressed,
 //change the input
 //change the button
 function nameConfirm(){

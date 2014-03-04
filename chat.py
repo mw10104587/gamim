@@ -4,7 +4,7 @@
 Chat Server
 ===========
 
-This simple application uses WebSockets to run a primitive chat server.
+This application uses WebSockets to run a primitive chat server.
 """
 
 import os
@@ -21,31 +21,48 @@ from nltk.classify import NaiveBayesClassifier
 import pickle
 import json
 
+import subprocess
+import shlex
+
 
 #load the saved NLTK Classifier.
 classifier1Pickle = open('classifier_movie_review.pickle','r')
 classifier1 = pickle.load(classifier1Pickle)
 classifier1Pickle.close()
 
-
+"""get word features, for classifier."""
 def word_feats(words):
     return dict([(word, True) for word in words])
 
-
+"""get the possibility of the sentence being negative."""
 def getNegEmotionValue(theString):
     samples = classifier1.prob_classify( word_feats( theString.split() ) )
-    #print samples
-    #print samples.samples()
-    #print samples.prob("neg")
     return samples.prob("neg")
 
+"""get the possibility of the sentence being positive."""
 def getPosEmotionValue(theString):
     samples = classifier1.prob_classify( word_feats( theString.split() ))
     return samples.prob("pos")
 
+def RateSentiment(sentiString):
+    #open a subprocess using shlex to get the command line string into the correct args list format
+    p = subprocess.Popen(shlex.split("java -jar SentiStrengthCom.jar stdin sentidata SentiStrength_Data/"),stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+    #communicate via stdin the string to be rated. Note that all spaces are replaced with +
+    stdout_text, stderr_text = p.communicate(sentiString.replace(" ","+"))
+    #remove the tab spacing between the positive and negative ratings. e.g. 1    -5 -> 1-5
+    stdout_text = stdout_text.rstrip().replace("\t","")
+    return stdout_text
 
-def myClassify(chat):
-    return classifier1.classify(word_feats( chat.split() ))
+print RateSentiment("I'm very happy to see you here")
+
+print RateSentiment("you're such an asshole")
+
+print RateSentiment("good job!")
+
+sys.stdout.flush()
+
+#def myClassify(chat):
+#    return classifier1.classify(word_feats( chat.split() ))
 
 
 REDIS_URL = os.environ['REDISCLOUD_URL']
@@ -56,8 +73,7 @@ app.debug = 'DEBUG' in os.environ
 
 sockets = Sockets(app)
 redis = redis.from_url(REDIS_URL)
-#redis is used to save key-value pairs..
-
+"""redis is used to save key-value pairs.."""
 
 
 class ChatBackend(object):
@@ -114,18 +130,13 @@ def inbox(ws):
         # Sleep to prevent *contstant* context-switches.
         gevent.sleep(0.1)
         message = ws.receive()
-        #message = message + str( getLengthOfMessage(message) )
         print message
         sys.stdout.flush()
 	
         if message:
-            #message = message.replace("}", ',\"' + 'length\":\"' + str( getLengthOfMessage(message) )+ '\"' + '}' )
             jsonMessage = json.loads(message)
-            print "length of message function"
-            print getLengthOfMessage(message)
             message = message.replace("}", ',\"' + 'length\":\"' + str( getLengthOfMessage(message) )+ '\"' + ',\"' + 'neg\":\"' + str(getNegEmotionValue(jsonMessage["text"])) + '\"' + ',\"' + 'pos\":\"' + str(getPosEmotionValue(jsonMessage["text"])) + '\"' + '}' )
             
-            #print "message after modification is: " + message
             sys.stdout.flush()
             app.logger.info(u'Inserting message: {}'.format(message))
             #post the message to given channel

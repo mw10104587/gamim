@@ -50,6 +50,7 @@
 #input-form{
   margin-bottom: 20px;
   margin-top: 10px;
+  height: 34px;
 }
 
 #input-text{width: 80%; float: left;}
