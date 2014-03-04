@@ -14,7 +14,9 @@ inbox.onmessage = function(message) {
  
   var negP = parseFloat(data.neg);
   console.log(data.neg);
-
+  var posP = parseFloat(data.pos);
+  console.log(posP);
+  /*
   var emotionRangeClassString = ""
     if (     negP > 0     && negP < 1/11 )  
       emotionRangeClassString = "rg-11";
@@ -38,7 +40,38 @@ inbox.onmessage = function(message) {
       emotionRangeClassString = "rg-2";
     else if (negP >= 10/11 && negP <= 1)
       emotionRangeClassString = "rg-1";
+  */
+  var emotionRangeClassString = ""
+    if ( negP > posP){
 
+      switch(negP){
+        case 1:
+          emotionRangeClassString = "rg-5";
+          break;
+        case 2:
+          emotionRangeClassString = "rg-4";
+          break;
+        case 3:
+          emotionRangeClassString = "rg-3";
+          break;
+        case 4:
+          emotionRangeClassString = "rg-2";
+          break;
+        case 5:
+          emotionRangeClassString = "rg-1";
+          break;
+      }
+    }
+    else if(posP > negP){
+      var index = posP + 6;
+      emotionRangeClassString = "rg-".concat( index.toString() );
+      
+    }
+    else{ 
+      emotionRangeClassString = "rg-6";
+    }
+
+  console.log(emotionRangeClassString);
 
   //if it's the content we entered
   if ( $("#input-name")[0].value == name ) {
@@ -85,7 +118,7 @@ $("#input-form").on("submit", function(event) {
   //we stringify it because it only support string.
   outbox.send(JSON.stringify({ handle: handle, text: text }));
   $("#input-text")[0].value = "";
-  console.log(stringifyText);
+  //console.log(stringifyText);
 });
 
 //called when confirm button pressed,

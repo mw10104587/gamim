@@ -135,8 +135,12 @@ def inbox(ws):
 	
         if message:
             jsonMessage = json.loads(message)
-            message = message.replace("}", ',\"' + 'length\":\"' + str( getLengthOfMessage(message) )+ '\"' + ',\"' + 'neg\":\"' + str(getNegEmotionValue(jsonMessage["text"])) + '\"' + ',\"' + 'pos\":\"' + str(getPosEmotionValue(jsonMessage["text"])) + '\"' + '}' )
-            
+            #NLTK version analysis
+            #message = message.replace("}", ',\"' + 'length\":\"' + str( getLengthOfMessage(message) )+ '\"' + ',\"' + 'neg\":\"' + str(getNegEmotionValue(jsonMessage["text"])) + '\"' + ',\"' + 'pos\":\"' + str(getPosEmotionValue(jsonMessage["text"])) + '\"' + '}' )
+            #SentiStrength analysis
+            sentistrength_result = RateSentiment(jsonMessage["text"])
+            message = message.replace("}", ',\"' + 'length\":\"' + str( getLengthOfMessage(message) )+ '\"' + ',\"' + 'neg\":\"' + sentistrength_result[2:] + '\"' + ',\"' + 'pos\":\"' + sentistrength_result[:1] + '\"' + '}' )
+
             sys.stdout.flush()
             app.logger.info(u'Inserting message: {}'.format(message))
             #post the message to given channel
