@@ -129,7 +129,8 @@ border-color: black;
 margin-left: 25px;
 position: relative;
 width: 250px;
-height: 120px;
+/*height: 120px;*/
+min-height: 120px;
 padding: 0px;
 background: #000000;
 border: solid 4px;
