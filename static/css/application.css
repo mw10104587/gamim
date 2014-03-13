@@ -75,7 +75,8 @@ float: right;
 margin-right: 25px;
 position: relative;
 width: 250px;
-height: 120px;
+/*height: 120px;*/
+min-height: 120px;  
 padding: 3px;
 border: solid 4px;
 -webkit-border-radius: 10px;
@@ -116,7 +117,9 @@ z-index: 0;
 .bubble-span-panel{  
 margin-top: 10px;
 /*background-color: black;*/
-height: 122px;
+/*height: 122px;*/
+min-height: 122px;
+overflow: auto;
 border-color: black;
 }
 
