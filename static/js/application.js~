@@ -92,8 +92,7 @@ inbox.onmessage = function(message) {
 	$("#chat-bottom-pusher")[0].style.minHeight = ( iPusherHeightNeeded - iChildrenHeight ) + 'px';
 	var divLastChatWindow = aChildren[aChildren.length-1];
 	visual.generateBubbles( posP - negP, textLength, divLastChatWindow.offsetLeft, divLastChatWindow.offsetTop,
-		divLastChatWindow.offsetLeft + divLastChatWindow.offsetWidth / 2,
-		divLastChatWindow.offsetTop + divLastChatWindow.offsetHeight / 2 );
+		divLastChatWindow.offsetLeft + divLastChatWindow.offsetWidth, divLastChatWindow.offsetTop + divLastChatWindow.offsetHeight );
   }
   //if it's the content other people entered
   else{
