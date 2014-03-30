@@ -1,0 +1,68 @@
+Physics.behavior('battle-behavior', function( parent ){
+				
+	return {
+		init: function( cfg ){
+			parent.init.call(this, cfg);
+			this.world = cfg.world;
+			
+			this.battleLine = cfg.battleLine;
+			this.fieldWidth = 640;
+			
+			this.positiveBubbles = cfg.positiveBubbles;
+			this.negativeBubbles = cfg.negativeBubbles;
+			
+			this.maxSpeed = cfg.maxSpeed;
+			this.maxCircles = cfg.maxCircles;
+		},
+		
+		// apply an acceleration (up/down) based on the Y distance to battle field
+		behave: function( data ){
+			var iTotalBubbles = this.positiveBubbles.length + this.negativeBubbles.length;
+			
+			if( iTotalBubbles > 0 )
+			{
+				var body;
+				var scratch = Physics.scratchpad();
+				var vAcc = scratch.vector();
+				var iXBattleCenter = ( 630 - 10 ) / 2 + 10;
+				var iBattleLineModifier = iXBattleCenter;
+				
+				for ( var i = 0; i < iTotalBubbles; i++ )
+				{
+					var bIsPositive = i < this.positiveBubbles.length;
+					body = bIsPositive ? this.positiveBubbles[ i ] : this.negativeBubbles[ i - this.positiveBubbles.length ];
+					var velocity = body.state.vel;
+					
+					var bIsInBattleArea = body.state.pos.get( 1 ) < this.battleLine.state.pos.get( 1 ) * 2;
+					iBattleLineModifier += bIsInBattleArea ? bIsPositive ? 1 : -1 : 0;
+					
+					if( bIsInBattleArea && iTotalBubbles > this.maxCircles && 
+						( bIsPositive == this.positiveBubbles.length > this.negativeBubbles.length ) )
+					{
+						this.world.removeBody( body );
+						bIsPositive ? this.positiveBubbles.splice( i, 1 ) : this.negativeBubbles.splice( i - this.positiveBubbles.length, 1 );
+						--i; --iTotalBubbles;
+						continue;
+					}
+					
+					var x = ( !bIsInBattleArea ? bIsPositive ? 20 - body.state.pos.get( 0 ) : this.fieldWidth - 20 - body.state.pos.get( 0 ) :
+						this.battleLine.state.pos.get( 0 ) - body.state.pos.get( 0 ) );
+					x = x - velocity.get( 0 ) * 2000;
+					x = x + Math.sin( body.state.pos.get( 1 ) / 10 ) * -90 /*- 45*/;
+					x = Math.min( Math.abs( x ), body.options.maxSpeed - Math.abs( velocity.get( 0 ) ) ) * ( x < 0 ? -1 : 1 );
+					
+					var y = ( this.battleLine.state.pos.get( 1 ) - body.state.pos.get( 1 ) - velocity.get( 1 ) * 2000 );
+					y = ( bIsPositive == ( body.state.pos.get( 0 ) > this.battleLine.state.pos.get( 0 ) ) ) ? 500 : y;
+					y = Math.min( Math.abs( y ), body.options.maxSpeed - Math.abs( velocity.get( 1 ) ) ) * ( y < 0 ? -1 : 1 );
+					
+					vAcc.set( x * 0.000003, y * 0.000003 );
+					
+					body.accelerate( vAcc );
+				}
+				
+				battleLine.state.pos.set( Math.max( 10, Math.min( 630, iBattleLineModifier ) ), battleLine.state.pos.get( 1 ) );
+				scratch.done();
+			}
+		}
+	};
+});
