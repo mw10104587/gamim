@@ -80,17 +80,15 @@ inbox.onmessage = function(message) {
 	$("#chat-text").append("<div class='bubble-span-panel'><div class='words my-words "+emotionRangeClassString+"'" + "><div class='panel-body white-text'>" + $('<span/>').text(data.text ).html() + "</div></div></div>"); 
 
 	var iPusherHeightNeeded = $("#chat-text").height();
-	var aChildren = $("#chat-text").children();
-	var iChildrenHeight=0;
-	$("#chat-text").find('div').each(function(){
-		if( $(this).className == "bubble-span-panel" )
-		{
-			iChildrenHeight+=$(this).height();
-		}
+	var childrenHeightSum=0;
+	var divLastChatWindow;
+	$("#chat-text div.bubble-span-panel").each( function(){
+		console.log("Chat div height : " + $(this).height() );
+		childrenHeightSum = childrenHeightSum + $(this).outerHeight( true );
+		divLastChatWindow = $(this);
 	});
 
-	$("#chat-bottom-pusher")[0].style.minHeight = ( iPusherHeightNeeded - iChildrenHeight ) + 'px';
-	var divLastChatWindow = aChildren[aChildren.length-1];
+	$("#chat-bottom-pusher")[0].style.minHeight = ( iPusherHeightNeeded - childrenHeightSum ) + 'px';
 	visual.generateBubbles( posP - negP, textLength, divLastChatWindow.offsetLeft, divLastChatWindow.offsetTop,
 		divLastChatWindow.offsetLeft + divLastChatWindow.offsetWidth / 2,
 		divLastChatWindow.offsetTop + divLastChatWindow.offsetHeight / 2 );
