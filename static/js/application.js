@@ -75,30 +75,47 @@ inbox.onmessage = function(message) {
 
   console.log(emotionRangeClassString);
 
+	var bubblesColor = 'black';
+	var fX = 0.45;
+	var fY = 0.45;
+	var fWidth = 0.1;
+	var fHeight = 0.1;
+
   //if it's the content we entered
   if ( $("#input-name")[0].value == name ) {    
 	$("#chat-text").append("<div class='bubble-span-panel'><div class='words my-words "+emotionRangeClassString+"'" + "><div class='panel-body white-text'>" + $('<span/>').text(data.text ).html() + "</div></div></div>"); 
-
-	var iPusherHeightNeeded = $("#chat-text").height();
-	var childrenHeightSum=0;
-	var divLastChatWindow;
-	$("#chat-text div.bubble-span-panel").each( function(){
-		console.log("Chat div height : " + $(this).height() );
-		childrenHeightSum = childrenHeightSum + $(this).outerHeight( true );
-		divLastChatWindow = $(this);
-	});
-
-	$("#chat-bottom-pusher")[0].style.minHeight = ( iPusherHeightNeeded - childrenHeightSum ) + 'px';
-	visual.generateBubbles( posP - negP, textLength, divLastChatWindow.offsetLeft, divLastChatWindow.offsetTop,
-		divLastChatWindow.offsetLeft + divLastChatWindow.offsetWidth / 2,
-		divLastChatWindow.offsetTop + divLastChatWindow.offsetHeight / 2 );
   }
   //if it's the content other people entered
   else{
 
      $("#chat-text").append("<div class='bubble-span-panel'><div class='words his-words "+emotionRangeClassString+"'" + "><div class='panel-body white-text'>" + $('<span/>').text(data.text ).html() + "</div></div></div>");
-  visual.generateBubbles( posP - negP, textLength, 120, 500, 120, 500 );
   }
+
+
+	var iPusherHeightNeeded = $("#chat-text").height();
+	var childrenHeightSum=0;
+	var chatDiv = $("#chat-text")[0];
+	var divLastChatWindow;
+	$("#chat-text div.bubble-span-panel").each( function(){
+		console.log("Chat div height : " + $(this).height() );
+		childrenHeightSum = childrenHeightSum + $(this).outerHeight( true );
+	});
+
+	$("div.bubble-span-panel > div").each( function(){
+		divLastChatWindow = $(this)[0];
+	});
+
+	$("#chat-bottom-pusher")[0].style.minHeight = ( iPusherHeightNeeded - childrenHeightSum ) + 'px';
+
+	bubblesColor = computedStyle( divLastChatWindow ).borderTopColor;
+	fX = divLastChatWindow.offsetLeft / chatDiv.clientWidth;
+	fY = divLastChatWindow.offsetTop / chatDiv.clientHeight;
+	fWidth = divLastChatWindow.clientWidth / chatDiv.clientWidth;
+	fHeight = divLastChatWindow.clientHeight / chatDiv.clientHeight;
+
+	console.log('bubbles color : ' + bubblesColor );
+	console.log('bubbles generation rect : ' + fX + ';' + fY + ' ' + fWidth + 'x' + fHeight );
+	visual.generateBubbles( posP - negP, bubblesColor, textLength, fX, fY, fX + fWidth, fY + fHeight );
 
   
   $("#chat-text").stop().animate({
