@@ -13,6 +13,7 @@ import json
 import logging
 import redis
 import gevent
+
 from flask import Flask, render_template
 from flask_sockets import Sockets
 
@@ -23,6 +24,7 @@ import json
 
 import subprocess
 import shlex
+import firebasin
 
 
 #load the saved NLTK Classifier.
@@ -83,11 +85,12 @@ class ChatBackend(object):
         self.clients = list()
         self.pubsub = redis.pubsub()
         self.pubsub.subscribe(REDIS_CHAN)
+        self.firebase = firebasin.Firebase("https://gamim.firebaseio.com/")
 
     def __iter_data(self):
         for message in self.pubsub.listen():
             data = message.get('data')
-	    print data
+	    #/print data
             if message['type'] == 'message':
                 app.logger.info(u'Sending message: {}'.format(data))
                 yield data
@@ -114,6 +117,10 @@ class ChatBackend(object):
         """Maintains Redis subscription in the background."""
         gevent.spawn(self.run)
 
+    def saveToFirebase(self, name, content, emotionValue):
+        self.firebase.push({"name": name, "content": content, "emotionValue": emotionValue})
+
+
 chats = ChatBackend()
 chats.start()
 
@@ -130,21 +137,35 @@ def inbox(ws):
         # Sleep to prevent *contstant* context-switches.
         gevent.sleep(0.1)
         message = ws.receive()
-        print message
-        sys.stdout.flush()
+        #print message
+        #sys.stdout.flush()
 	
         if message:
             jsonMessage = json.loads(message)
             #NLTK version analysis
             #message = message.replace("}", ',\"' + 'length\":\"' + str( getLengthOfMessage(message) )+ '\"' + ',\"' + 'neg\":\"' + str(getNegEmotionValue(jsonMessage["text"])) + '\"' + ',\"' + 'pos\":\"' + str(getPosEmotionValue(jsonMessage["text"])) + '\"' + '}' )
             #SentiStrength analysis
-            sentistrength_result = RateSentiment(jsonMessage["text"])
+            text = jsonMessage["text"]
+            sentistrength_result = RateSentiment(text)
+            name = jsonMessage["handle"]
+            posV = sentistrength_result[:1]
+            negV = sentistrength_result[2:]
+            emotionV = getEmotionValueFrom( int(posV), int(negV) )  
             message = message.replace("}", ',\"' + 'length\":\"' + str( getLengthOfMessage(message) )+ '\"' + ',\"' + 'neg\":\"' + sentistrength_result[2:] + '\"' + ',\"' + 'pos\":\"' + sentistrength_result[:1] + '\"' + '}' )
 
+
+            print emotionV
             sys.stdout.flush()
             app.logger.info(u'Inserting message: {}'.format(message))
             #post the message to given channel
             redis.publish(REDIS_CHAN, message)
+            chats.saveToFirebase( name, text, emotionV )
+
+def getEmotionValueFrom(pos, neg):
+    if max([pos, neg]) == pos:
+        return pos
+    else:
+        return (-1) * neg
 
 @sockets.route('/receive')
 def outbox(ws):
