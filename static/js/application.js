@@ -1,8 +1,8 @@
 //hostname which is emotion-chat-v1.herokuapp
 var inbox = new ReconnectingWebSocket("ws://"+ location.host + "/receive");
 var outbox = new ReconnectingWebSocket("ws://"+ location.host + "/submit");
-var visual = new Bubbles( { canvasid: "bubblesContainer", width: 640, height: 480,
-	battleField: { width: 640, height: 30 }, maxSpeed: 15, maxBubbles: 250 } );
+var visual = new Bubbles( { renderer: "canvas", canvasid: "bubblesContainer", width: 640, height: 480,
+	battleField: { width: 640, height: 30 }, maxSpeed: 15, maxBubbles: 30 } );
 
 //receiving a message
 //get data and show in chat box
@@ -109,7 +109,7 @@ inbox.onmessage = function(message) {
 
 	bubblesColor = computedStyle( divLastChatWindow ).borderTopColor;
 	fX = divLastChatWindow.offsetLeft / chatDiv.clientWidth;
-	fY = divLastChatWindow.offsetTop / chatDiv.clientHeight;
+	fY = ( divLastChatWindow.offsetTop - chatDiv.scrollTop ) / chatDiv.clientHeight;
 	fWidth = divLastChatWindow.clientWidth / chatDiv.clientWidth;
 	fHeight = divLastChatWindow.clientHeight / chatDiv.clientHeight;
 

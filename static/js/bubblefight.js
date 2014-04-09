@@ -10,6 +10,8 @@
 
 // General variables
 world = Physics();
+resx = 640;
+resy = 480;
 pxmin = 0;
 pymin = 0;
 pxmax = 0;
@@ -18,6 +20,7 @@ pBattleX = 320;
 pBattleY = 20;
 newBubblesColor = 'rgba(105, 44, 44, 0.7)';
 bubblesToCreate = 0;
+behavior = 0;
 positiveBubblesList = [];
 negativeBubblesList = [];
 balance = 0.1;
@@ -40,7 +43,7 @@ function Bubbles(config)
 
 	// world declaration
 	// creation of the renderer which will draw the world
-	renderer = Physics.renderer("canvas",{
+	renderer = Physics.renderer( config.renderer,{
 		el: config.canvasid,    // canvas element id
 		width: config.width,        // canvas width
 		height: config.height,        // canvas height
@@ -48,6 +51,9 @@ function Bubbles(config)
 	});
 	// adding the renderer to the world
 	world.add(renderer);
+
+	resx = config.width;
+	resy = config.height;
 
 	this.battleLine = Physics.body( "convex-polygon", {
 		x: config.battleField.width / 2,
@@ -64,9 +70,11 @@ function Bubbles(config)
 	} );
 	world.add( this.battleLine );
 
-	world.add(Physics.behavior('battle-behavior', { world: world, battleLine: this.battleLine,
+	behavior = Physics.behavior('battle-behavior', { world: world, battleLine: this.battleLine,
 		positiveBubbles: positiveBubblesList, negativeBubbles: negativeBubblesList,
-		maxSpeed:config.maxSpeed, maxCircles:config.maxBubbles }) );
+		maxSpeed:config.maxSpeed, maxBubbles:config.maxBubbles, width: config.width });
+	world.add( behavior );
+
 	// what happens at every iteration step? We render (show the world)
 	world.subscribe("step",this.render);
 
@@ -83,7 +91,7 @@ function Bubbles(config)
 	//world.add(gravity);
 	// adding collision detection with canvas edges
 	world.add(Physics.behavior("edge-collision-detection", {
-		  aabb: Physics.aabb(0, 0, 640, 480),
+		  aabb: Physics.aabb(0, 0, resx, resy),
 		  restitution: 0
 	}));
 	// bodies will react to forces such as gravity
@@ -94,12 +102,12 @@ function Bubbles(config)
 
 	this.generateBubbles = function( pbalance, color, number, pminXRatio, pminYRatio, pmaxXRatio, pmaxYRatio ){
 		var score = Math.floor(Math.random()*26) + 5;
-		//balance = -( e.pageX/640 * 2 - 1 );
+		//balance = -( e.pageX/resx * 2 - 1 );
 		var offset = $(this).offset();
-		pxmin = pminXRatio * 640;
-		pymin = pminYRatio * 480;
-		pxmax = pmaxXRatio * 640;
-		pymax = pmaxYRatio * 480;
+		pxmin = pminXRatio * resx;
+		pymin = pminYRatio * resy;
+		pxmax = pmaxXRatio * resx;
+		pymax = pmaxYRatio * resy;
 
 		newBubblesColor = color;
 		bubblesToCreate += number;
@@ -127,7 +135,6 @@ Bubbles.prototype.step = function()
 {
 	if( bubblesToCreate > 0 )
 	{
-
 		while( bubblesToCreate > 0 )
 		{
 			var bubble = Physics.body( "circle", {
@@ -146,18 +153,10 @@ Bubbles.prototype.step = function()
 					}
 				}
 			} );
-	
-			if( balance < 0 )
-			{
-				// Create a negative bubble
-				negativeBubblesList[ negativeBubblesList.length ] = bubble;
-			}
-			else
-			{
-				// Create a positive bubble
-				positiveBubblesList[ positiveBubblesList.length ] = bubble;
-			}
-	
+
+			bubble.isPositive = balance >= 0;
+			behavior.PositiveCount += bubble.isPositive ? 1 : 0;
+			behavior.NegativeCount += bubble.isPositive ? 0 : 1;
 			world.add( bubble );
 			--bubblesToCreate;
 			fCurrentAngle += fAngleStep;
