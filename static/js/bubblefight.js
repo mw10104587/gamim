@@ -24,8 +24,8 @@ pBattleY = 20;
 newBubblesColor = 'rgba(105, 44, 44, 0.7)';
 bubblesToCreate = 0;
 behavior = 0;
-positiveBubblesList = [];
-negativeBubblesList = [];
+iNumberOfNegativeBubbles = 0;
+iNumberOfPositiveBubbles = 0;
 balance = 0.1;
 fAngleStep = 2 * 3.1415;
 fCurrentAngle = 0;
@@ -77,7 +77,6 @@ function Bubbles(config)
 	world.add( this.battleLine );
 
 	behavior = Physics.behavior('battle-behavior', { world: world, battleLine: this.battleLine,
-		positiveBubbles: positiveBubblesList, negativeBubbles: negativeBubblesList,
 		maxSpeed:config.maxSpeed, maxBubbles:config.maxBubbles, width: config.width });
 	world.add( behavior );
 
@@ -117,8 +116,24 @@ function Bubbles(config)
 
 		newBubblesColor = color;
 		bubblesToCreate += number;
+		
 		fAngleStep = 2 * 3.1415 / number;
 		balance = pbalance;
+
+		iNumberOfPositiveBubbles += balance >= 0 ? number : 0;
+		iNumberOfNegativeBubbles += balance < 0 ? number : 0;
+		$("#positiveIndicator p")[0].innerHTML = iNumberOfPositiveBubbles;
+		$("#negativeIndicator p")[0].innerHTML = iNumberOfNegativeBubbles;
+		var iPosMult = ( 1 + ( iNumberOfPositiveBubbles - iNumberOfNegativeBubbles ) /
+			( iNumberOfPositiveBubbles + iNumberOfNegativeBubbles ) );
+		var iNegMult = ( 1 + ( iNumberOfNegativeBubbles - iNumberOfPositiveBubbles ) /
+			( iNumberOfPositiveBubbles + iNumberOfNegativeBubbles ) );
+		$("#positiveIndicator")[0].style.minWidth = ( 15 + 15 * iPosMult ) + "px";
+		$("#positiveIndicator")[0].style.minHeight = ( 35 + 30 * iPosMult ) + "px";
+		$("#positiveIndicator p")[0].style.fontSize = ( 50 + 50 * iPosMult ) + "%";
+		$("#negativeIndicator")[0].style.minWidth = ( 15 + 15 * iNegMult ) + "px";
+		$("#negativeIndicator")[0].style.minHeight = ( 35 + 30 * iNegMult ) + "px";
+		$("#negativeIndicator p")[0].style.fontSize = ( 50 + 50 * iNegMult ) + "%";
 	};
 
 	// handling timestep
