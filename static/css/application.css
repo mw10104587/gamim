@@ -146,7 +146,7 @@ border-radius: 16px;
 {
 content: "";
 position: absolute;
-top: 32%;
+top: 25%;
 right: -8px;
 border-style: solid;
 border-width: 9px 0 9px 9px;
@@ -161,7 +161,7 @@ z-index: 1;
 content: "";
 position: absolute;
 margin-top:-3px;
-top: 32%;
+top: 25%;
 left: 245px;
 border-style: solid;
 border-width: 12px 0 12px 12px;
@@ -180,6 +180,10 @@ margin-top: 2px;
 min-height: 45px;
 overflow: auto;
 border-color: black;
+}
+
+.panel-body {
+    padding: 5px;
 }
 
 .his-words
@@ -202,7 +206,7 @@ border-radius: 16px;
 {
 content: "";
 position: absolute;
-top: 32%;
+top: 25%;
 left: -9px;
 border-style: solid;
 border-width: 9px 9px 9px 0;
@@ -217,7 +221,7 @@ z-index: 1;
 content: "";
 position: absolute;
 margin-top:-3px;
-top: 32%;
+top: 25%;
 left: -12px;
 border-style: solid;
 border-width: 12px 12px 12px 0;
