@@ -16,6 +16,9 @@ pxmin = 0;
 pymin = 0;
 pxmax = 0;
 pymax = 0;
+baseRadius = 4;
+bubleSizeMultiplierStep =  1.25;
+bubleSizeMultiplierLimit = 2.5;
 pBattleX = 320;
 pBattleY = 20;
 newBubblesColor = 'rgba(105, 44, 44, 0.7)';
@@ -49,6 +52,9 @@ function Bubbles(config)
 		height: config.height,        // canvas height
 		meta: false        // setting it to "true" will display FPS
 	});
+
+	baseRadius = baseRadius * config.width / 640;
+
 	// adding the renderer to the world
 	world.add(renderer);
 
@@ -140,7 +146,7 @@ Bubbles.prototype.step = function()
 			var bubble = Physics.body( "circle", {
 				x: pxmin + ( pxmax - pxmin ) / 2 + Math.sin( fCurrentAngle ) * ( pxmax - pxmin ) * 0.75,
 				y: pymin + ( pymax - pymin ) / 2 + Math.cos( fCurrentAngle ) * ( pymax - pymin ) * 0.75,
-				radius: 4,
+				radius: baseRadius,
 				restitution:0.2,
 				mass: 0.2,
 				maxSpeed: Math.random() * 10 - 5 + 15,

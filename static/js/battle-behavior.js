@@ -43,17 +43,17 @@ Physics.behavior('battle-behavior', function( parent ){
 					var velocity = body.state.vel;
 					
 					var bIsInBattleArea = body.state.pos.get( 1 ) < this.battleLine.state.pos.get( 1 ) * 2;
-					var iMultiplier = 4;
+					var iMultiplier = baseRadius;
 					while( iMultiplier <= body.geometry.radius )
 					{
 						iBattleLineModifier += bIsInBattleArea ? bIsPositive ? 1 : -1 : 0;
-						iMultiplier *= 1.25;
+						iMultiplier *= bubleSizeMultiplierStep;
 					}
 				
 
 					if( bIsInBattleArea && iTotalBubbles > this.maxCircles &&
 						( bIsPositive == ( this.PositiveCount > this.NegativeCount ) ) &&
-						body.geometry.radius < 4 * 2.5 )
+						body.geometry.radius < baseRadius * bubleSizeMultiplierLimit )
 					{
 						var bMerged = false;
 
@@ -67,7 +67,7 @@ Physics.behavior('battle-behavior', function( parent ){
 								vXDist < body.geometry.radius + aMergeCandidates[ j ].geometry.radius &&
 								vYDist < body.geometry.radius + aMergeCandidates[ j ].geometry.radius )
 							{
-								body.geometry.radius = body.geometry.radius * 1.25;
+								body.geometry.radius = body.geometry.radius * bubleSizeMultiplierStep;
 								body.view = null;
 								this.world.removeBody( aMergeCandidates[ j ] );
 								aMergeCandidates.splice( j, 1 );
@@ -107,7 +107,10 @@ Physics.behavior('battle-behavior', function( parent ){
 					body.accelerate( vAcc );
 				}
 				
-				this.battleLine.state.pos.set( Math.max( 10, Math.min( 630, iBattleLineModifier ) ), this.battleLine.state.pos.get( 1 ) );
+				var iMaxLinePos = Math.min( resx - 10, this.battleLine.state.pos.get( 0 ) + 0.25 );
+				var iMinLinePos = Math.max( 10, this.battleLine.state.pos.get( 0 ) - 0.25 );
+				this.battleLine.state.pos.set( Math.max( iMinLinePos, Math.min( iMaxLinePos, iBattleLineModifier ) ),
+					this.battleLine.state.pos.get( 1 ) );
 				scratch.done();
 			}
 		}
