@@ -25,7 +25,7 @@ import json
 import subprocess
 import shlex
 import firebasin
-
+from datetime import datetime
 
 #load the saved NLTK Classifier.
 classifier1Pickle = open('classifier_movie_review.pickle','r')
@@ -118,7 +118,8 @@ class ChatBackend(object):
         gevent.spawn(self.run)
 
     def saveToFirebase(self, name, content, emotionValue):
-        self.firebase.push({"name": name, "content": content, "emotionValue": emotionValue})
+
+        self.firebase.push({"name": name, "content": content, "emotionValue": emotionValue, "time":str(datetime.now() )})
 
 
 chats = ChatBackend()

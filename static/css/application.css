@@ -196,12 +196,12 @@ z-index: 0;
 
 
 /* start from most neg to more pos */
-.rg-1{ border-color: black; }
-.rg-1:before{border-color: transparent black ;}
+.rg-1{ border-color: #9400d3; }
+.rg-1:before{border-color: transparent #9400d3 ;}
 .rg-1:after{border-color: transparent black;}
 
-.rg-2{ border-color: red; }
-.rg-2:before{ border-color: transparent red;}
+.rg-2{ border-color: #4b0082; }
+.rg-2:before{ border-color: transparent #4b0082;}
 .rg-2:after{ border-color: transparent black;}
 
 .rg-3{ border-color: #919191;}
