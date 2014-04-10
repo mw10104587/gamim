@@ -10,28 +10,56 @@
 
 // General variables
 world = Physics();
-px = 0;
-py = 0;
+resx = 640;
+resy = 480;
+pxmin = 0;
+pymin = 0;
+pxmax = 0;
+pymax = 0;
+baseRadius = 4;
+bubleSizeMultiplierStep =  1.25;
+bubleSizeMultiplierLimit = 2.5;
 pBattleX = 320;
 pBattleY = 20;
+newBubblesColor = 'rgba(105, 44, 44, 0.7)';
 bubblesToCreate = 0;
-positiveBubblesList = [];
-negativeBubblesList = [];
+behavior = 0;
+iNumberOfNegativeBubbles = 0;
+iNumberOfPositiveBubbles = 0;
 balance = 0.1;
+fAngleStep = 2 * 3.1415;
+fCurrentAngle = 0;
+
+function computedStyle(pelem)
+{
+  var computedStyle;
+  if (typeof pelem.currentStyle != 'undefined')
+    { computedStyle = pelem.currentStyle; }
+  else
+    { computedStyle = document.defaultView.getComputedStyle(pelem, null); }
+
+  return computedStyle;
+}
 
 function Bubbles(config)
 {	 	
 
 	// world declaration
 	// creation of the renderer which will draw the world
-	renderer = Physics.renderer("canvas",{
+	renderer = Physics.renderer( config.renderer,{
 		el: config.canvasid,    // canvas element id
 		width: config.width,        // canvas width
 		height: config.height,        // canvas height
-		meta: true        // setting it to "true" will display FPS
+		meta: false        // setting it to "true" will display FPS
 	});
+
+	baseRadius = baseRadius * config.width / 640;
+
 	// adding the renderer to the world
 	world.add(renderer);
+
+	resx = config.width;
+	resy = config.height;
 
 	this.battleLine = Physics.body( "convex-polygon", {
 		x: config.battleField.width / 2,
@@ -48,26 +76,27 @@ function Bubbles(config)
 	} );
 	world.add( this.battleLine );
 
-	world.add(Physics.behavior('battle-behavior', { world: world, battleLine: this.battleLine,
-		positiveBubbles: positiveBubblesList, negativeBubbles: negativeBubblesList,
-		maxSpeed:config.maxSpeed, maxCircles:config.maxBubbles }) );
+	behavior = Physics.behavior('battle-behavior', { world: world, battleLine: this.battleLine,
+		maxSpeed:config.maxSpeed, maxBubbles:config.maxBubbles, width: config.width });
+	world.add( behavior );
+
 	// what happens at every iteration step? We render (show the world)
 	world.subscribe("step",this.render);
 
 	world.subscribe("step",this.step);
 	
 	// this is the default gravity
-	var gravity = Physics.behavior("constant-acceleration",{
+	/*var gravity = Physics.behavior("constant-acceleration",{
 			acc: {
 			x:0, 
 			y:0
 		} 
-	});
+	});*/
 	// adding gravity to the world
 	//world.add(gravity);
 	// adding collision detection with canvas edges
 	world.add(Physics.behavior("edge-collision-detection", {
-		  aabb: Physics.aabb(0, 0, 640, 480),
+		  aabb: Physics.aabb(0, 0, resx, resy),
 		  restitution: 0
 	}));
 	// bodies will react to forces such as gravity
@@ -76,15 +105,35 @@ function Bubbles(config)
 	world.add(Physics.behavior("body-collision-detection"));
 	world.add(Physics.behavior("sweep-prune"));
 
-	this.generateBubbles = function( pbalance, number, pminX, pminY, pmaxX, pmaxY ){
+	this.generateBubbles = function( pbalance, color, number, pminXRatio, pminYRatio, pmaxXRatio, pmaxYRatio ){
 		var score = Math.floor(Math.random()*26) + 5;
-		//balance = -( e.pageX/640 * 2 - 1 );
+		//balance = -( e.pageX/resx * 2 - 1 );
 		var offset = $(this).offset();
-		px = ( pminX + pmaxX ) / 2;
-		py = ( pminY + pmaxY ) / 2;
+		pxmin = pminXRatio * resx;
+		pymin = pminYRatio * resy;
+		pxmax = pmaxXRatio * resx;
+		pymax = pmaxYRatio * resy;
 
+		newBubblesColor = color;
 		bubblesToCreate += number;
+		
+		fAngleStep = 2 * 3.1415 / number;
 		balance = pbalance;
+
+		iNumberOfPositiveBubbles += balance >= 0 ? number : 0;
+		iNumberOfNegativeBubbles += balance < 0 ? number : 0;
+		$("#positiveIndicator p")[0].innerHTML = iNumberOfPositiveBubbles;
+		$("#negativeIndicator p")[0].innerHTML = iNumberOfNegativeBubbles;
+		var iPosMult = ( 1 + ( iNumberOfPositiveBubbles - iNumberOfNegativeBubbles ) /
+			( iNumberOfPositiveBubbles + iNumberOfNegativeBubbles ) );
+		var iNegMult = ( 1 + ( iNumberOfNegativeBubbles - iNumberOfPositiveBubbles ) /
+			( iNumberOfPositiveBubbles + iNumberOfNegativeBubbles ) );
+		$("#positiveIndicator")[0].style.minWidth = ( 15 + 15 * iPosMult ) + "px";
+		$("#positiveIndicator")[0].style.minHeight = ( 35 + 30 * iPosMult ) + "px";
+		$("#positiveIndicator p")[0].style.fontSize = ( 50 + 50 * iPosMult ) + "%";
+		$("#negativeIndicator")[0].style.minWidth = ( 15 + 15 * iNegMult ) + "px";
+		$("#negativeIndicator")[0].style.minHeight = ( 35 + 30 * iNegMult ) + "px";
+		$("#negativeIndicator p")[0].style.fontSize = ( 50 + 50 * iNegMult ) + "%";
 	};
 
 	// handling timestep
@@ -107,36 +156,31 @@ Bubbles.prototype.step = function()
 {
 	if( bubblesToCreate > 0 )
 	{
-		var bubble = Physics.body( "circle", {
-			x: px + Math.floor(Math.random()*4) - 1.5,
-			y: py + Math.floor(Math.random()*4) - 1.5,
-			radius: 4,
-			restitution:0.2,
-			mass: 0.2,
-			maxSpeed: Math.random() * 10 - 5 + 15,
-			styles: {
-				'circle' : {
-					strokeStyle: balance < 0 ? 'rgba(105, 44, 44, 0.7)' : 'rgba(44, 105, 44, 0.7)',
-					lineWidth: 1,
-					fillStyle: balance < 0 ? 'rgba(105, 44, 44, 0.7)' : 'rgba(44, 105, 44, 0.7)',
-					angleIndicator: balance < 0 ? 'rgba(105, 44, 44, 0.7)' : 'rgba(44, 105, 44, 0.7)'
+		while( bubblesToCreate > 0 )
+		{
+			var bubble = Physics.body( "circle", {
+				x: pxmin + ( pxmax - pxmin ) / 2 + Math.sin( fCurrentAngle ) * ( pxmax - pxmin ) * 0.75,
+				y: pymin + ( pymax - pymin ) / 2 + Math.cos( fCurrentAngle ) * ( pymax - pymin ) * 0.75,
+				radius: baseRadius,
+				restitution:0.2,
+				mass: 0.2,
+				maxSpeed: Math.random() * 10 - 5 + 15,
+				styles: {
+					'circle' : {
+						strokeStyle: newBubblesColor,//balance < 0 ? 'rgba(105, 44, 44, 0.7)' : 'rgba(44, 105, 44, 0.7)',
+						lineWidth: 1,
+						fillStyle: newBubblesColor,//balance < 0 ? 'rgba(105, 44, 44, 0.7)' : 'rgba(44, 105, 44, 0.7)',
+						angleIndicator: newBubblesColor//balance < 0 ? 'rgba(105, 44, 44, 0.7)' : 'rgba(44, 105, 44, 0.7)'
+					}
 				}
-			}
-		} );
-	
-		if( balance < 0 )
-		{
-			// Create a negative bubble
-			bubble.geometry.name
-			negativeBubblesList[ negativeBubblesList.length ] = bubble;
+			} );
+
+			bubble.isPositive = balance >= 0;
+			behavior.PositiveCount += bubble.isPositive ? 1 : 0;
+			behavior.NegativeCount += bubble.isPositive ? 0 : 1;
+			world.add( bubble );
+			--bubblesToCreate;
+			fCurrentAngle += fAngleStep;
 		}
-		else
-		{
-			// Create a positive bubble
-			positiveBubblesList[ positiveBubblesList.length ] = bubble;
-		}
-	
-		world.add( bubble );
-		--bubblesToCreate;
 	}
 }
