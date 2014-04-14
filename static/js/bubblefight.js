@@ -24,26 +24,14 @@ pBattleY = 20;
 newBubblesColor = 'rgba(105, 44, 44, 0.7)';
 bubblesToCreate = 0;
 behavior = 0;
-iNumberOfNegativeBubbles = 0;
-iNumberOfPositiveBubbles = 0;
+iNumberOfPushRightBubbles = 0;
+iNumberOfPushLeftBubbles = 0;
 balance = 0.1;
 fAngleStep = 2 * 3.1415;
 fCurrentAngle = 0;
 
-function computedStyle(pelem)
-{
-  var computedStyle;
-  if (typeof pelem.currentStyle != 'undefined')
-    { computedStyle = pelem.currentStyle; }
-  else
-    { computedStyle = document.defaultView.getComputedStyle(pelem, null); }
-
-  return computedStyle;
-}
-
 function Bubbles(config)
-{	 	
-
+{
 	// world declaration
 	// creation of the renderer which will draw the world
 	renderer = Physics.renderer( config.renderer,{
@@ -58,17 +46,19 @@ function Bubbles(config)
 	// adding the renderer to the world
 	world.add(renderer);
 
+	this.inverseLeftRight = config.inverseLeftRight;
+
 	resx = config.width;
 	resy = config.height;
 
 	this.battleLine = Physics.body( "convex-polygon", {
 		x: config.battleField.width / 2,
-		y: config.battleField.height,
+		y: config.battleField.height - 50,
 		vertices: [
-			{ x: -5, y: -config.battleField.height },
-			{ x: 5, y: -config.battleField.height },
-			{ x: 5, y: config.battleField.height },
-			{ x: -5, y: config.battleField.height }
+			{ x: -1, y: -config.battleField.height - 250 },
+			{ x: 1, y: -config.battleField.height - 250 },
+			{ x: 1, y: config.battleField.height },
+			{ x: -1, y: config.battleField.height }
 		],
 		hidden: true,
 		fixed: true,
@@ -77,7 +67,7 @@ function Bubbles(config)
 	world.add( this.battleLine );
 
 	behavior = Physics.behavior('battle-behavior', { world: world, battleLine: this.battleLine,
-		maxSpeed:config.maxSpeed, maxBubbles:config.maxBubbles, width: config.width });
+		maxSpeed:config.maxSpeed, maxBubbles:config.maxBubbles, width: config.width, height: config.height });
 	world.add( behavior );
 
 	// what happens at every iteration step? We render (show the world)
@@ -96,8 +86,8 @@ function Bubbles(config)
 	//world.add(gravity);
 	// adding collision detection with canvas edges
 	world.add(Physics.behavior("edge-collision-detection", {
-		  aabb: Physics.aabb(0, 0, resx, resy),
-		  restitution: 0
+		  aabb: Physics.aabb(0, -100, resx, resy),
+		  restitution: 2
 	}));
 	// bodies will react to forces such as gravity
 	world.add(Physics.behavior("body-impulse-response"));
@@ -118,22 +108,26 @@ function Bubbles(config)
 		bubblesToCreate += number;
 		
 		fAngleStep = 2 * 3.1415 / number;
-		balance = pbalance;
+		balance = this.inverseLeftRight ? -pbalance : pbalance;
 
-		iNumberOfPositiveBubbles += balance >= 0 ? number : 0;
-		iNumberOfNegativeBubbles += balance < 0 ? number : 0;
-		$("#positiveIndicator p")[0].innerHTML = iNumberOfPositiveBubbles;
-		$("#negativeIndicator p")[0].innerHTML = iNumberOfNegativeBubbles;
-		var iPosMult = ( 1 + ( iNumberOfPositiveBubbles - iNumberOfNegativeBubbles ) /
-			( iNumberOfPositiveBubbles + iNumberOfNegativeBubbles ) );
-		var iNegMult = ( 1 + ( iNumberOfNegativeBubbles - iNumberOfPositiveBubbles ) /
-			( iNumberOfPositiveBubbles + iNumberOfNegativeBubbles ) );
-		$("#positiveIndicator")[0].style.minWidth = ( 15 + 15 * iPosMult ) + "px";
-		$("#positiveIndicator")[0].style.minHeight = ( 35 + 30 * iPosMult ) + "px";
-		$("#positiveIndicator p")[0].style.fontSize = ( 50 + 50 * iPosMult ) + "%";
-		$("#negativeIndicator")[0].style.minWidth = ( 15 + 15 * iNegMult ) + "px";
-		$("#negativeIndicator")[0].style.minHeight = ( 35 + 30 * iNegMult ) + "px";
-		$("#negativeIndicator p")[0].style.fontSize = ( 50 + 50 * iNegMult ) + "%";
+		iNumberOfPushLeftBubbles += balance < 0 ? number : 0;
+		iNumberOfPushRightBubbles += balance >= 0 ? number : 0;
+		behavior.battleLineTargetPosition = resx / 2 + iNumberOfPushRightBubbles - iNumberOfPushLeftBubbles;
+		$("#pushRightIndicator p")[0].innerHTML = iNumberOfPushRightBubbles;
+		$("#pushLeftIndicator p")[0].innerHTML = iNumberOfPushLeftBubbles;
+		var iLeftMult = ( 1 + ( iNumberOfPushLeftBubbles - iNumberOfPushRightBubbles ) /
+			( iNumberOfPushLeftBubbles + iNumberOfPushRightBubbles ) );
+		var iRightMult = ( 1 + ( iNumberOfPushRightBubbles - iNumberOfPushLeftBubbles ) /
+			( iNumberOfPushLeftBubbles + iNumberOfPushRightBubbles ) );
+		$("#pushRightIndicator")[0].style.minWidth = ( 15 + 15 * iRightMult ) + "px";
+		$("#pushRightIndicator")[0].style.minHeight = ( 35 + 30 * iRightMult ) + "px";
+		$("#pushRightIndicator p")[0].style.fontSize = ( 50 + 50 * iRightMult ) + "%";
+		$("#pushLeftIndicator")[0].style.minWidth = ( 15 + 15 * iLeftMult ) + "px";
+		$("#pushLeftIndicator")[0].style.minHeight = ( 35 + 30 * iLeftMult ) + "px";
+		$("#pushLeftIndicator p")[0].style.fontSize = ( 50 + 50 * iLeftMult ) + "%";
+
+		
+			this.battleLineTargetPosition = this.width / 2;
 	};
 
 	// handling timestep
@@ -159,25 +153,27 @@ Bubbles.prototype.step = function()
 		while( bubblesToCreate > 0 )
 		{
 			var bubble = Physics.body( "circle", {
-				x: pxmin + ( pxmax - pxmin ) / 2 + Math.sin( fCurrentAngle ) * ( pxmax - pxmin ) * 0.75,
+				x: pxmin + ( pxmax - pxmin ) / 2 + Math.sin( fCurrentAngle ) * ( pxmax - pxmin ) * 0.5,
 				y: pymin + ( pymax - pymin ) / 2 + Math.cos( fCurrentAngle ) * ( pymax - pymin ) * 0.75,
 				radius: baseRadius,
 				restitution:0.2,
-				mass: 0.2,
+				mass: 1,
 				maxSpeed: Math.random() * 10 - 5 + 15,
-				styles: {
+				styles: 					
+					{				
 					'circle' : {
 						strokeStyle: newBubblesColor,//balance < 0 ? 'rgba(105, 44, 44, 0.7)' : 'rgba(44, 105, 44, 0.7)',
 						lineWidth: 1,
 						fillStyle: newBubblesColor,//balance < 0 ? 'rgba(105, 44, 44, 0.7)' : 'rgba(44, 105, 44, 0.7)',
-						angleIndicator: newBubblesColor//balance < 0 ? 'rgba(105, 44, 44, 0.7)' : 'rgba(44, 105, 44, 0.7)'
+						angleIndicator: 0//balance < 0 ? 'rgba(105, 44, 44, 0.7)' : 'rgba(44, 105, 44, 0.7)'
 					}
 				}
 			} );
 
-			bubble.isPositive = balance >= 0;
-			behavior.PositiveCount += bubble.isPositive ? 1 : 0;
-			behavior.NegativeCount += bubble.isPositive ? 0 : 1;
+			bubble.age = 0;
+			bubble.isPushLeft = balance < 0;
+			behavior.PushLeftCount += bubble.isPushLeft ? 1 : 0;
+			behavior.PushRightCount += bubble.isPushLeft ? 0 : 1;
 			world.add( bubble );
 			--bubblesToCreate;
 			fCurrentAngle += fAngleStep;

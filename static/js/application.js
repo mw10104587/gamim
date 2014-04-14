@@ -1,8 +1,32 @@
 //hostname which is emotion-chat-v1.herokuapp
 var inbox = new ReconnectingWebSocket("ws://"+ location.host + "/receive");
 var outbox = new ReconnectingWebSocket("ws://"+ location.host + "/submit");
-var visual = new Bubbles( { renderer: "canvas", canvasid: "bubblesContainer", width: 1280, height: 960,
-	battleField: { width: 1280, height: 30 }, maxSpeed: 15, maxBubbles: 120 } );
+
+function computedStyle(pelem)
+{
+  var computedStyle;
+  if (typeof pelem.currentStyle != 'undefined')
+    { computedStyle = pelem.currentStyle; }
+  else
+    { computedStyle = document.defaultView.getComputedStyle(pelem, null); }
+
+  return computedStyle;
+}
+
+var bInverseLeftAndRight = false;
+
+var visual = new Bubbles( { renderer: "canvas", canvasid: "bubblesContainer", width: $("#bubblesContainer")[0].clientWidth, height: $("#bubblesContainer")[0].clientHeight,
+	battleField: { width: $("#bubblesContainer")[0].clientWidth, height: 50 }, maxSpeed: 15, maxBubbles: 120, inverseLeftRight: bInverseLeftAndRight } );
+
+if( bInverseLeftAndRight )
+{
+	var xLeftLeft = computedStyle( $("#pushLeftIndicator")[0] ).left;
+	var xLeftRight = computedStyle( $("#pushLeftIndicator")[0] ).right;
+	$("#pushLeftIndicator")[0].left = computedStyle( $("#pushRightIndicator")[0] ).left;
+	$("#pushLeftIndicator")[0].right = computedStyle( $("#pushRightIndicator")[0] ).right;
+	$("#pushRightIndicator")[0].left = xLeftLeft;
+	$("#pushRightIndicator")[0].right = xLeftRight;
+}
 
 //receiving a message
 //get data and show in chat box
