@@ -20,20 +20,32 @@ body,html{
 
 #pushRightIndicator {
 	background-image:url(../data/positive.svg);
-	right:5px;
+	left:5px;
 }
+
+#pushRightGlowIndicator {
+	background-image:url(../data/positive_glow.svg);
+	background-size: 100% auto;
+	background-position: 50% 50%;
+	width:200%;
+	height:200%;
+	margin:auto;
+}
+
 #pushLeftIndicator {
 	background-image:url(../data/negative.svg);
-	left:5px;
+	right:5px;
 }
 
 #pushRightIndicator, #pushLeftIndicator {
 	position:absolute;
 	top:5px;
-	min-width:30px;
-	min-height:60px;
-	z-index:2000;
 	background-size: 100% auto;
+	background-position: 50% 0%;
+	min-width:3%;
+	min-height:10%;
+	z-index:2000;
+	overflow:visible;
 	background-repeat: no-repeat;
 	text-alignment:center;
 }
@@ -44,6 +56,7 @@ body,html{
 	width: 100%;
 	text-align: center;
 	font-weight: 900;
+	font-size:50%;
 	color: white;
 }
 

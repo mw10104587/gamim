@@ -29,6 +29,8 @@ iNumberOfPushLeftBubbles = 0;
 balance = 0.1;
 fAngleStep = 2 * 3.1415;
 fCurrentAngle = 0;
+fLastPosVSNegBalance = 0;
+fGlowVisibility = 0;
 
 function Bubbles(config)
 {
@@ -61,7 +63,7 @@ function Bubbles(config)
 			{ x: 1, y: 500 },
 			{ x: -1, y: 500 }
 		],
-		hidden: false,
+		hidden: true,
 		fixed: true,
 		mass: 5000000000
 	} );
@@ -116,18 +118,31 @@ function Bubbles(config)
 		iNumberOfPushLeftBubbles += balance < 0 ? number : 0;
 		iNumberOfPushRightBubbles += balance >= 0 ? number : 0;
 		behavior.battleLineTargetPosition = resx / 2 + iNumberOfPushRightBubbles - iNumberOfPushLeftBubbles;
+
+		var iBaseIndicatorWidth = 3;
+		var iBaseIndicatorHeight = 10;
+		var iMaxIndicatorWidth = 8;
+		var iMaxIndicatorHeight = 20;
 		$("#pushRightIndicator p")[0].innerHTML = iNumberOfPushRightBubbles;
 		$("#pushLeftIndicator p")[0].innerHTML = iNumberOfPushLeftBubbles;
 		var iLeftMult = ( 1 + ( iNumberOfPushLeftBubbles - iNumberOfPushRightBubbles ) /
 			( iNumberOfPushLeftBubbles + iNumberOfPushRightBubbles ) );
 		var iRightMult = ( 1 + ( iNumberOfPushRightBubbles - iNumberOfPushLeftBubbles ) /
 			( iNumberOfPushLeftBubbles + iNumberOfPushRightBubbles ) );
-		$("#pushRightIndicator")[0].style.minWidth = ( 15 + 15 * iRightMult ) + "px";
-		$("#pushRightIndicator")[0].style.minHeight = ( 35 + 30 * iRightMult ) + "px";
+		$("#pushRightIndicator")[0].style.minWidth = ( iBaseIndicatorWidth + iMaxIndicatorWidth / 2 * iRightMult ) + "%";
+		$("#pushRightIndicator")[0].style.minHeight = ( iBaseIndicatorHeight + iMaxIndicatorHeight / 2 * iRightMult ) + "%";
 		$("#pushRightIndicator p")[0].style.fontSize = ( 50 + 50 * iRightMult ) + "%";
-		$("#pushLeftIndicator")[0].style.minWidth = ( 15 + 15 * iLeftMult ) + "px";
-		$("#pushLeftIndicator")[0].style.minHeight = ( 35 + 30 * iLeftMult ) + "px";
+		$("#pushLeftIndicator")[0].style.minWidth = ( iBaseIndicatorWidth + iMaxIndicatorWidth / 2 * iLeftMult ) + "%";
+		$("#pushLeftIndicator")[0].style.minHeight = ( iBaseIndicatorHeight + iMaxIndicatorHeight / 2 * iLeftMult ) + "%";
 		$("#pushLeftIndicator p")[0].style.fontSize = ( 50 + 50 * iLeftMult ) + "%";
+
+		var fNewPosVSNegBalance = iRightMult - iLeftMult;
+		if( fLastPosVSNegBalance < 0 && fNewPosVSNegBalance >= 0 )
+		{
+			fGlowVisibility = 100;
+		}
+		fGlowVisibility = 100;
+		fLastPosVSNegBalance = fNewPosVSNegBalance;
 
 		this.battleLineTargetPosition = this.width / 2;
 	};
@@ -146,6 +161,8 @@ Bubbles.prototype.render = function()
 Bubbles.prototype.timestep = function(time,dt)
 {
 	world.step(time);
+	$("#pushRightGlowIndicator")[0].style.opacity = fGlowVisibility + '%';
+	//fGlowVisibility = Math.max( 0, fGlowVisibility - ( time * 0.00001 ) );
 }
 
 Bubbles.prototype.step = function()

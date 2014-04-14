@@ -9,14 +9,25 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="50"
-   height="50"
+   width="66.821426"
+   height="66.292854"
    id="svg2"
    version="1.1"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="positive.svg">
+   sodipodi:docname="positive_glow.svg">
   <defs
-     id="defs4" />
+     id="defs4">
+    <filter
+       id="filter3087"
+       inkscape:label="Simple blur"
+       inkscape:menu="ABCs"
+       inkscape:menu-tooltip="Simple Gaussian blur, same as the blur slider in Fill and Stroke dialog"
+       color-interpolation-filters="sRGB">
+      <feGaussianBlur
+         id="feGaussianBlur3089"
+         stdDeviation="3" />
+    </filter>
+  </defs>
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -24,16 +35,16 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="7.9195959"
-     inkscape:cx="16.946022"
-     inkscape:cy="22.360958"
+     inkscape:zoom="3.959798"
+     inkscape:cx="45.495722"
+     inkscape:cy="5.7483235"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     fit-margin-top="10"
-     fit-margin-left="10"
-     fit-margin-right="10"
-     fit-margin-bottom="10"
+     fit-margin-top="5"
+     fit-margin-left="5"
+     fit-margin-right="5"
+     fit-margin-bottom="5"
      inkscape:window-width="1375"
      inkscape:window-height="876"
      inkscape:window-x="65"
@@ -55,10 +66,11 @@
      inkscape:label="Calque 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-283.57143,-318.79075)">
+     transform="translate(-275.16071,-310.64431)">
     <g
        id="g2986"
-       transform="translate(-59.368571,139.72175)">
+       transform="matrix(1.2797619,0,0,1.2678571,-162.30417,85.06041)"
+       style="filter:url(#filter3087)">
       <path
          id="path2988"
          d="m 367.938,189.069 c -8.283,0 -14.998,6.716 -14.998,15 0,8.284 6.715,15 14.998,15 8.285,0 15.002,-6.716 15.002,-15 0,-8.284 -6.716,-15 -15.002,-15 z m 0,25.914 c -6.027,0 -10.912,-4.887 -10.912,-10.914 0,-6.027 4.885,-10.914 10.912,-10.914 6.027,0 10.914,4.886 10.914,10.914 0,6.028 -4.886,10.914 -10.914,10.914 z"
