@@ -15,8 +15,8 @@ function computedStyle(pelem)
 
 var bInverseLeftAndRight = false;
 
-var visual = new Bubbles( { renderer: "canvas", canvasid: "bubblesContainer", width: $("#bubblesContainer")[0].clientWidth, height: $("#bubblesContainer")[0].clientHeight,
-	battleField: { width: $("#bubblesContainer")[0].clientWidth, height: 50 }, maxSpeed: 15, maxBubbles: 120, inverseLeftRight: bInverseLeftAndRight } );
+var visualBubbles = new Bubbles( { debug: false, rendererName: "canvasBubbles", canvasid: "bubblesContainer", width: $("#bubblesContainer")[0].clientWidth, height: $("#bubblesContainer")[0].clientHeight,
+	battleField: { width: $("#bubblesContainer")[0].clientWidth, height: $("#bubblesContainer")[0].clientHeight * 30 / 100 }, maxSpeed: 30, maxBubbles: 120, inverseLeftRight: bInverseLeftAndRight } );
 
 if( bInverseLeftAndRight )
 {
@@ -139,7 +139,7 @@ inbox.onmessage = function(message) {
 
 	console.log('bubbles color : ' + bubblesColor );
 	console.log('bubbles generation rect : ' + fX + ';' + fY + ' ' + fWidth + 'x' + fHeight );
-	visual.generateBubbles( posP - negP, bubblesColor, textLength, fX, fY, fX + fWidth, fY + fHeight );
+	visualBubbles.generateBubbles( posP - negP, bubblesColor, textLength, fX, fY, fX + fWidth, fY + fHeight );
 
   
   $("#chat-text").stop().animate({

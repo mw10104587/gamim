@@ -34,8 +34,9 @@ function Bubbles(config)
 {
 	// world declaration
 	// creation of the renderer which will draw the world
-	renderer = Physics.renderer( config.renderer,{
+	renderer = Physics.renderer( config.rendererName,{
 		el: config.canvasid,    // canvas element id
+		debug: config.debug,
 		width: config.width,        // canvas width
 		height: config.height,        // canvas height
 		meta: false        // setting it to "true" will display FPS
@@ -53,18 +54,20 @@ function Bubbles(config)
 
 	this.battleLine = Physics.body( "convex-polygon", {
 		x: config.battleField.width / 2,
-		y: config.battleField.height - 50,
+		y: config.battleField.height - 500 / 2,
 		vertices: [
-			{ x: -1, y: -config.battleField.height - 250 },
-			{ x: 1, y: -config.battleField.height - 250 },
-			{ x: 1, y: config.battleField.height },
-			{ x: -1, y: config.battleField.height }
+			{ x: -1, y: 0 },
+			{ x: 1, y: 0 },
+			{ x: 1, y: 500 },
+			{ x: -1, y: 500 }
 		],
-		hidden: true,
+		hidden: false,
 		fixed: true,
 		mass: 5000000000
 	} );
 	world.add( this.battleLine );
+
+	this.battleLine.battleField = { width: config.battleField.width, height: config.battleField.height };
 
 	behavior = Physics.behavior('battle-behavior', { world: world, battleLine: this.battleLine,
 		maxSpeed:config.maxSpeed, maxBubbles:config.maxBubbles, width: config.width, height: config.height });
@@ -126,8 +129,7 @@ function Bubbles(config)
 		$("#pushLeftIndicator")[0].style.minHeight = ( 35 + 30 * iLeftMult ) + "px";
 		$("#pushLeftIndicator p")[0].style.fontSize = ( 50 + 50 * iLeftMult ) + "%";
 
-		
-			this.battleLineTargetPosition = this.width / 2;
+		this.battleLineTargetPosition = this.width / 2;
 	};
 
 	// handling timestep
@@ -159,18 +161,31 @@ Bubbles.prototype.step = function()
 				restitution:0.2,
 				mass: 1,
 				maxSpeed: Math.random() * 10 - 5 + 15,
-				styles: 					
+				styles:
 					{				
 					'circle' : {
-						strokeStyle: newBubblesColor,//balance < 0 ? 'rgba(105, 44, 44, 0.7)' : 'rgba(44, 105, 44, 0.7)',
+						strokeStyle: newBubblesColor,
 						lineWidth: 1,
-						fillStyle: newBubblesColor,//balance < 0 ? 'rgba(105, 44, 44, 0.7)' : 'rgba(44, 105, 44, 0.7)',
-						angleIndicator: 0//balance < 0 ? 'rgba(105, 44, 44, 0.7)' : 'rgba(44, 105, 44, 0.7)'
+						padding: 1,
+						isPositive: balance >= 0,
+						fillStyle: newBubblesColor,
+						angleIndicator: false,
+						sign: {
+							inside: {
+								strokeStyle: 'rgba(195, 195, 195, 1)',
+								lineWidth: 2
+							},
+							outside: {
+								strokeStyle: 'rgba(0, 0, 0, 1)',
+								lineWidth: 4
+							}
+						}
 					}
 				}
 			} );
 
 			bubble.age = 0;
+			bubble.seed = Math.random() * 100;
 			bubble.isPushLeft = balance < 0;
 			behavior.PushLeftCount += bubble.isPushLeft ? 1 : 0;
 			behavior.PushRightCount += bubble.isPushLeft ? 0 : 1;

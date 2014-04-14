@@ -15,7 +15,7 @@ Physics.behavior('battle-behavior', function( parent ){
 			this.pushLeftBubbles = cfg.pushLeftBubbles;
 			
 			this.maxSpeed = cfg.maxSpeed;
-			maxCircles = cfg.maxBubbles;
+			this.maxBubbles = cfg.maxBubbles;
 
 			this.PushLeftCount = 0;
 			this.PushRightCount = 0;
@@ -38,8 +38,8 @@ Physics.behavior('battle-behavior', function( parent ){
 				var vDeltaForce = scratch.vector();
 				var vPositionInNearFuture = scratch.vector();
 				var iXBattleCenter = this.fieldWidth / 2;
-				var fBattleVerticalCenter = 100;
-				var bIsMergingEnabled = false;
+				var fBattleVerticalCenter = this.battleLine.battleField.height / 2;
+				var bIsMergingEnabled = true;
 				
 				for ( var i = 0; i < iTotalBubbles; i++ )
 				{
@@ -52,11 +52,11 @@ Physics.behavior('battle-behavior', function( parent ){
 					var bIsPushLeft = body.isPushLeft;
 
 					vPositionInNearFuture.set( body.state.vel.get( 0 ), body.state.vel.get( 1 ) );
-					vPositionInNearFuture.mult( 100 ).add( body.state.pos.get( 0 ), body.state.pos.get( 1 ) );
+					vPositionInNearFuture.mult( 250 ).add( body.state.pos.get( 0 ), body.state.pos.get( 1 ) );
 					
 					var bIsInBattleArea = body.state.pos.get( 1 ) <= fBattleVerticalCenter * 2;
 
-					if( bIsMergingEnabled && bIsInBattleArea && iTotalBubbles > maxCircles &&
+					if( bIsMergingEnabled && bIsInBattleArea && iTotalBubbles > this.maxBubbles &&
 						( bIsPushLeft == ( this.PushLeftCount > this.PushRightCount ) ) &&
 						body.geometry.radius < baseRadius * bubleSizeMultiplierLimit )
 					{
@@ -97,10 +97,11 @@ Physics.behavior('battle-behavior', function( parent ){
 
 					var xTarget = 0;
 					var yTarget = 0;
-					var fRandSine = Math.sin( ( body.state.pos.get( 1 ) + body.state.pos.get( 0 ) ) / 100 ) * 25;
+					var fRandSineX = Math.sin( ( body.age + body.seed ) / 30 ) * 25;
+					var fRandSineY = Math.sin( ( body.age - body.seed ) / 30 ) * 25;
 					
 					// We can distinguish 3 cases :
-					var yLowerAreaLimit = this.height - 100;
+					var yLowerAreaLimit = this.height - 150;
 					var bWillBeInLowerArea = !bIsInBattleArea && vPositionInNearFuture.get( 1 ) >= yLowerAreaLimit;
 					var bWillBeInMiddleArea = !bIsInBattleArea && !bWillBeInLowerArea;
 					var fMaxDeltaForce = this.maxSpeed / 10000;
@@ -108,13 +109,15 @@ Physics.behavior('battle-behavior', function( parent ){
 					if( bWillBeInLowerArea )
 					{
 						xTarget = bIsPushLeft ? body.state.pos.get( 0 ) + 100 : body.state.pos.get( 0 ) - 100;
-						yTarget = body.state.pos.get( 1 ) - 25 + fRandSine;
+						yTarget = body.state.pos.get( 1 ) - 10 + fRandSineY;
 					}
 					// 2. The bubble will be in the middle area and is simply going up
 					else if( bWillBeInMiddleArea )
 					{
-						xTarget = ( bIsPushLeft ? body.state.pos.get( 0 ) + 50 : body.state.pos.get( 0 ) - 50 ) + fRandSine;
-						yTarget = body.state.pos.get( 1 ) - 25;
+						var vBaseTarget = ( bIsPushLeft ? body.state.pos.get( 0 ) + 50 : body.state.pos.get( 0 ) - 50 );
+						vBaseTarget = Math.min( this.width - 25, Math.max( 25, vBaseTarget ) );
+						xTarget = vBaseTarget + fRandSineX / 2;
+						yTarget = body.state.pos.get( 1 ) - 25 + fRandSineY / 2;
 					}
 					// 3. The bubble is in the battle area, it just goes toward the battle line
 					else
@@ -122,8 +125,15 @@ Physics.behavior('battle-behavior', function( parent ){
 						xTarget = this.battleLine.state.pos.get( 0 ) + ( bIsPushLeft ? -10 : 10 );
 						// Still some test, are we on the right side ?
 						var bIsOnTheRightSide = bIsPushLeft == ( this.battleLine.state.pos.get( 0 ) < body.state.pos.get( 0 ) );
-						var fVerticalHardDownPusher = body.state.pos.get( 1 ) < 25 ? 100 : 25;
-						yTarget = bIsOnTheRightSide ? body.state.pos.get( 1 ) + fRandSine + fVerticalHardDownPusher : body.state.pos.get( 1 ) + 100;
+
+						var fVerticalHardDownPusher = 1;
+
+						if( vPositionInNearFuture.get( 1 ) < 0 )
+							fVerticalHardDownPusher = 5000 * -vPositionInNearFuture.get( 1 );
+						else if( !bIsOnTheRightSide )
+							fVerticalHardDownPusher = 500;
+
+						yTarget = body.state.pos.get( 1 ) + fRandSineY / 2 + fVerticalHardDownPusher;
 						fMaxDeltaForce = this.maxSpeed / 100000;
 					}
 

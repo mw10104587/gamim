@@ -1,5 +1,5 @@
 
-Physics.renderer('bubbles', function( proto ){
+Physics.renderer('canvasBubbles', function( proto ){
 
     if ( !document ){
         // must be in node environment
@@ -34,7 +34,6 @@ Physics.renderer('bubbles', function( proto ){
                 fillStyle: 'rgba(44, 105, 44, 0.7)',
                 angleIndicator: 'rgba(69, 51, 78, 0.7)'
             },
-
             'convex-polygon' : {
                 strokeStyle: 'rgba(80, 50, 100, 0.7)',
                 lineWidth: 1,
@@ -154,7 +153,7 @@ Physics.renderer('bubbles', function( proto ){
 
             ctx.beginPath();
             this.setStyle( styles, ctx );
-            ctx.arc(x, y, r - 2, 0, Pi2, false);
+            ctx.arc(x, y, r, 0, Pi2, false);
             ctx.closePath();
             ctx.stroke();
             ctx.fill();
@@ -258,9 +257,27 @@ Physics.renderer('bubbles', function( proto ){
             hiddenCtx.save();
             hiddenCtx.translate(x, y);
 
-            if (name === 'circle' || name === 'redcircle' || name === 'greencircle'){
+            if (name === 'circle'){
 
-                this.drawCircle(0, 0, geometry.radius, styles, hiddenCtx);
+                this.drawCircle( styles.padding, styles.padding, geometry.radius - styles.padding * 2, styles, hiddenCtx);
+
+		if( typeof( styles.sign ) != 'undefined' )
+		{
+		        if( styles.isPositive )
+		        {
+                            hiddenCtx.translate( styles.sign.inside.lineWidth / 2, styles.sign.inside.lineWidth / 2);
+		            this.drawLine( { x: 0, y: -aabb.halfHeight / 2 },
+		                { x: 0, y: aabb.halfHeight / 2 }, styles.sign.inside, hiddenCtx);
+			    this.drawLine( { x: -aabb.halfWidth / 2, y: 0 },
+				{ x: aabb.halfWidth / 2, y: 0 }, styles.sign.inside, hiddenCtx);
+		        }
+			else
+			{
+                            hiddenCtx.translate( styles.sign.inside.lineWidth / 2, styles.sign.inside.lineWidth / 2);
+			    this.drawLine( { x: -aabb.halfWidth / 2, y: 0 },
+				{ x: aabb.halfWidth / 2, y: 0 }, styles.sign.inside, hiddenCtx);
+			}
+		}
 
             } else if (name === 'convex-polygon'){
 
@@ -323,7 +340,7 @@ Physics.renderer('bubbles', function( proto ){
 
             ctx.save();
             ctx.translate(pos.get(0) + offset.get(0), pos.get(1) + offset.get(1));
-            ctx.rotate(body.state.angular.pos);
+            //ctx.rotate(body.state.angular.pos);
             ctx.drawImage(view, -view.width/2, -view.height/2);
             ctx.restore();
 
