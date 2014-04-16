@@ -8,7 +8,5 @@ MySQL-python==1.2.3
 gunicorn==18.0
 py2app==0.7.3
 redis==2.8.0
-http://pyyaml.org/download/pyyaml/PyYAML-3.10.tar.gz
-http://pypi.python.org/packages/source/n/nltk/nltk-2.0.1rc1.tar.gz
 https://pypi.python.org/packages/source/w/ws4py/ws4py-0.3.4.zip
 git+git://github.com/abeisgreat/python-firebasin.git

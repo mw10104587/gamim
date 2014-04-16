@@ -17,8 +17,8 @@ import gevent
 from flask import Flask, render_template
 from flask_sockets import Sockets
 
-import nltk.classify.util
-from nltk.classify import NaiveBayesClassifier
+#import nltk.classify.util
+#from nltk.classify import NaiveBayesClassifier
 import pickle
 import json
 
@@ -26,25 +26,6 @@ import subprocess
 import shlex
 import firebasin
 from datetime import datetime
-
-#load the saved NLTK Classifier.
-classifier1Pickle = open('classifier_movie_review.pickle','r')
-classifier1 = pickle.load(classifier1Pickle)
-classifier1Pickle.close()
-
-"""get word features, for classifier."""
-def word_feats(words):
-    return dict([(word, True) for word in words])
-
-"""get the possibility of the sentence being negative."""
-def getNegEmotionValue(theString):
-    samples = classifier1.prob_classify( word_feats( theString.split() ) )
-    return samples.prob("neg")
-
-"""get the possibility of the sentence being positive."""
-def getPosEmotionValue(theString):
-    samples = classifier1.prob_classify( word_feats( theString.split() ))
-    return samples.prob("pos")
 
 def RateSentiment(sentiString):
     #open a subprocess using shlex to get the command line string into the correct args list format
