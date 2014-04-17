@@ -149,11 +149,21 @@ inbox.onmessage = function(message) {
   }, 800);
 };
 
+inbox.onopen = function(){
+  console.log("inbox opened");
+
+}
+
 inbox.onclose = function(){
-    console.log('inbox closed');
+  console.log('inbox closed');
     this.inbox = new WebSocket(inbox.url);
 
 };
+
+outbox.onclose = function(){
+  console.log("outbox opened");
+
+}
 
 outbox.onclose = function(){
     console.log('outbox closed');
