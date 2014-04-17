@@ -49,7 +49,7 @@ sys.stdout.flush()
 
 
 REDIS_URL = os.environ['REDISCLOUD_URL']
-REDIS_CHAN = 'chat'
+REDIS_CHAN = 'gamimtest'
 
 app = Flask(__name__)
 app.debug = 'DEBUG' in os.environ
