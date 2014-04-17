@@ -66,7 +66,7 @@ class ChatBackend(object):
         self.clients = list()
         self.pubsub = redis.pubsub()
         self.pubsub.subscribe(REDIS_CHAN)
-        self.firebase = firebasin.Firebase("https://gamim.firebaseio.com/")
+        self.firebase = firebasin.Firebase("https://gamim-test2.firebaseio.com/")
 
     def __iter_data(self):
         for message in self.pubsub.listen():
