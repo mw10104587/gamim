@@ -19,7 +19,7 @@ from flask_sockets import Sockets
 
 #import nltk.classify.util
 #from nltk.classify import NaiveBayesClassifier
-import pickle
+#import pickle
 import json
 
 import subprocess
@@ -36,11 +36,11 @@ def RateSentiment(sentiString):
     stdout_text = stdout_text.rstrip().replace("\t","")
     return stdout_text
 
-print RateSentiment("I'm very happy to see you here")
+#print RateSentiment("I'm very happy to see you here")
 
-print RateSentiment("you're such an asshole")
+#print RateSentiment("you're such an asshole")
 
-print RateSentiment("good job!")
+#print RateSentiment("good job!")
 
 sys.stdout.flush()
 
