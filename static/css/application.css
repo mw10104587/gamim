@@ -25,10 +25,15 @@ body,html{
 
 #pushRightGlowIndicator {
 	background-image:url(../data/positive_glow.svg);
-	background-size: 100% auto;
+	background-size: 100% 100%;
 	background-position: 50% 50%;
-	width:200%;
-	height:200%;
+	background-opacity:0;
+	opacity:0;
+	width:50%;
+	height:50%;
+	position:absolute;
+	top:0;
+	left:0;
 	margin:auto;
 }
 
@@ -196,6 +201,14 @@ z-index: 0;
 	border:inset 1px grey;
 	border-radius:5px;
 	z-index:5000;
+}
+
+.chartItem {
+	height:100%;
+	float:left;
+	width:9%;
+	border-style:solid;
+	border-width:15px;
 }
 
 .bubble-span-panel{  
