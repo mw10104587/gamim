@@ -31,6 +31,9 @@ balance = 0.1;
 fAngleStep = 2 * 3.1415;
 fCurrentAngle = 0;
 fLastPosVSNegBalance = 0;
+fGlowIsAppearing = false;
+fGlowAppearSpeed = 0.0001;
+fGlowDisappearSpeed = 0.000001;
 fGlowVisibility = 0;
 
 function Bubbles(config)
@@ -142,9 +145,9 @@ function Bubbles(config)
 		var fNewPosVSNegBalance = iRightMult - iLeftMult;
 		if( fLastPosVSNegBalance < 0 && fNewPosVSNegBalance >= 0 )
 		{
-			fGlowVisibility = 100;
+			fGlowIsAppearing = true;
 		}
-		fGlowVisibility = 100;
+
 		fLastPosVSNegBalance = fNewPosVSNegBalance;
 
 		this.battleLineTargetPosition = this.width / 2;
@@ -164,8 +167,19 @@ Bubbles.prototype.render = function()
 Bubbles.prototype.timestep = function(time,dt)
 {
 	world.step(time);
-	$("#pushRightGlowIndicator")[0].style.opacity = fGlowVisibility + '%';
-	//fGlowVisibility = Math.max( 0, fGlowVisibility - ( time * 0.00001 ) );
+	var div = $("#pushRightGlowIndicator")[0];
+	div.style.opacity = fGlowVisibility;
+	div.style.filter = "alpha(opacity=(" + ( fGlowVisibility * 100 ) + ")";
+
+	if( fGlowIsAppearing && fGlowVisibility < 1 )
+	{
+		fGlowVisibility = Math.min( 1, fGlowVisibility + time * fGlowAppearSpeed );
+		fGlowIsAppearing = fGlowVisibility < 1;
+	}
+	else if( !fGlowIsAppearing && fGlowVisibility > 0 )
+	{
+		fGlowVisibility = Math.max( 0, fGlowVisibility - time * fGlowDisappearSpeed );
+	}
 }
 
 Bubbles.prototype.styleForBubble = function( radius, color, balance )
