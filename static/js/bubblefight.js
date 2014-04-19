@@ -10,6 +10,7 @@
 
 // General variables
 world = Physics();
+bubblesWorld = 0;
 resx = 640;
 resy = 480;
 pxmin = 0;
@@ -43,6 +44,8 @@ function Bubbles(config)
 		height: config.height,        // canvas height
 		meta: false        // setting it to "true" will display FPS
 	});
+
+	bubblesWorld = this;
 
 	baseRadius = baseRadius * config.width / 640;
 
@@ -165,6 +168,46 @@ Bubbles.prototype.timestep = function(time,dt)
 	//fGlowVisibility = Math.max( 0, fGlowVisibility - ( time * 0.00001 ) );
 }
 
+Bubbles.prototype.styleForBubble = function( radius, color, balance )
+{
+	if( !this.bubbleStyles )
+	{
+		this.bubbleStyles = new Array();
+	}
+
+	var strStyleID = radius + color + balance;
+	if( typeof( this.bubbleStyles[ strStyleID ] ) == "undefined" )
+	{
+		this.bubbleStyles[ strStyleID ] =
+		{			
+			'circle' :
+			{
+				strokeStyle: color,
+				lineWidth: 1,
+				padding: 1,
+				isPositive: balance >= 0,
+				fillStyle: color,
+				angleIndicator: false,
+				sign:
+				{
+					inside:
+					{
+						strokeStyle: 'rgba(195, 195, 195, 1)',
+						lineWidth: 2
+					},
+					outside:
+					{
+						strokeStyle: 'rgba(0, 0, 0, 1)',
+						lineWidth: 4
+					}
+				}
+			}
+		};
+	}
+
+	return this.bubbleStyles[ strStyleID ];
+}
+
 Bubbles.prototype.step = function()
 {
 	if( bubblesToCreate > 0 )
@@ -178,29 +221,12 @@ Bubbles.prototype.step = function()
 				restitution:0.2,
 				mass: 1,
 				maxSpeed: Math.random() * 10 - 5 + 15,
-				styles:
-					{				
-					'circle' : {
-						strokeStyle: newBubblesColor,
-						lineWidth: 1,
-						padding: 1,
-						isPositive: balance >= 0,
-						fillStyle: newBubblesColor,
-						angleIndicator: false,
-						sign: {
-							inside: {
-								strokeStyle: 'rgba(195, 195, 195, 1)',
-								lineWidth: 2
-							},
-							outside: {
-								strokeStyle: 'rgba(0, 0, 0, 1)',
-								lineWidth: 4
-							}
-						}
-					}
-				}
+				styles: bubblesWorld.styleForBubble( baseRadius, newBubblesColor, balance )
 			} );
 
+			bubble.color = newBubblesColor;
+			bubble.balance = balance;
+			bubble.state.scale = 1;
 			bubble.age = 0;
 			bubble.seed = Math.random() * 100;
 			bubble.isPushLeft = balance < 0;
