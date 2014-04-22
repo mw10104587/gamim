@@ -69,20 +69,15 @@ body,html{
 	position:relative;
 	overflow: auto;
 	width:100%;
-	height:500px;
+	height:350px;
+	z-index:1500;
 	padding-bottom:10px;
-	background: rgb(41,45,45); /* Old browsers */
-	background: -moz-linear-gradient(top, rgba(41,45,45,1) 0%, rgba(46,51,51,1) 25%, rgba(229,234,234,1) 100%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(41,45,45,1)), color-stop(25%,rgba(46,51,51,1)), color-stop(100%,rgba(229,234,234,1))); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top, rgba(41,45,45,1) 0%,rgba(46,51,51,1) 25%,rgba(229,234,234,1) 100%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top, rgba(41,45,45,1) 0%,rgba(46,51,51,1) 25%,rgba(229,234,234,1) 100%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(top, rgba(41,45,45,1) 0%,rgba(46,51,51,1) 25%,rgba(229,234,234,1) 100%); /* IE10+ */
-	background: linear-gradient(to bottom, rgba(41,45,45,1) 0%,rgba(46,51,51,1) 25%,rgba(229,234,234,1) 100%); /* W3C */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#292d2d', endColorstr='#e5eaea',GradientType=0 ); /* IE6-9 */
+	margin-top:175px;
+	/*padding-top:80px;*/
 }
 
 #chat-bottom-pusher {
-  min-height: 490px;
+  min-height: 5px;
 }
 
 /*.bubble-span-panel{
@@ -102,13 +97,14 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#292d2d', end
 }
 
 #bubblesContainer {
-	background: -moz-linear-gradient(top, rgba(41,45,45,1) 0%, rgba(46,51,51,1) 25%, rgba(83,89,89,0) 35%, rgba(229,234,234,0) 100%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(41,45,45,1)), color-stop(25%,rgba(46,51,51,1)), color-stop(35%,rgba(83,89,89,0)), color-stop(100%,rgba(229,234,234,0))); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top, rgba(41,45,45,1) 0%,rgba(46,51,51,1) 25%,rgba(83,89,89,0) 35%,rgba(229,234,234,0) 100%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top, rgba(41,45,45,1) 0%,rgba(46,51,51,1) 25%,rgba(83,89,89,0) 35%,rgba(229,234,234,0) 100%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(top, rgba(41,45,45,1) 0%,rgba(46,51,51,1) 25%,rgba(83,89,89,0) 35%,rgba(229,234,234,0) 100%); /* IE10+ */
-	background: linear-gradient(to bottom, rgba(41,45,45,1) 0%,rgba(46,51,51,1) 25%,rgba(83,89,89,0) 35%,rgba(229,234,234,0) 100%); /* W3C */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#292d2d', endColorstr='#00e5eaea',GradientType=0 ); /* IE6-9 */
+	background: rgb(41,45,45); /* Old browsers */
+	background: -moz-linear-gradient(top, rgba(41,45,45,1) 0%, rgba(46,51,51,1) 25%, rgba(229,234,234,1) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(41,45,45,1)), color-stop(25%,rgba(46,51,51,1)), color-stop(100%,rgba(229,234,234,1))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, rgba(41,45,45,1) 0%,rgba(46,51,51,1) 25%,rgba(229,234,234,1) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, rgba(41,45,45,1) 0%,rgba(46,51,51,1) 25%,rgba(229,234,234,1) 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, rgba(41,45,45,1) 0%,rgba(46,51,51,1) 25%,rgba(229,234,234,1) 100%); /* IE10+ */
+	background: linear-gradient(to bottom, rgba(41,45,45,1) 0%,rgba(46,51,51,1) 25%,rgba(229,234,234,1) 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#292d2d', endColorstr='#e5eaea',GradientType=0 ); /* IE6-9 */
 }
 
 #input-name-form{
@@ -151,7 +147,8 @@ background-color: black;
 float: right;
 margin-right: 25px;
 position: relative;
-width: 250px;
+min-width: 250px;
+max-width: 75%;
 /*height: 120px;*/
 min-height: 30px;
 padding: 3px;
@@ -181,7 +178,7 @@ content: "";
 position: absolute;
 margin-top:-3px;
 top: 25%;
-left: 245px;
+right: -13px;
 border-style: solid;
 border-width: 12px 0 12px 12px;
 /*border-color: transparent #7E7F7F;*/
@@ -229,12 +226,14 @@ border-color: black;
 
 margin-left: 25px;
 position: relative;
-width: 250px;
+min-width: 250px;
+max-width: 75%;
 /*height: 120px;*/
 min-height: 30px;
 padding: 3px;
 background: #000000;
 border: solid 3px;
+float: left;
 -webkit-border-radius: 16px;
 -moz-border-radius: 16px;
 border-radius: 16px;
