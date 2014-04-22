@@ -35,6 +35,7 @@ fGlowIsAppearing = false;
 fGlowAppearSpeed = 0.0001;
 fGlowDisappearSpeed = 0.000001;
 fGlowVisibility = 0;
+bIsGlowEnabled = false;
 
 function Bubbles(config)
 {
@@ -145,7 +146,7 @@ function Bubbles(config)
 		var fNewPosVSNegBalance = iRightMult - iLeftMult;
 		if( fLastPosVSNegBalance < 0 && fNewPosVSNegBalance >= 0 )
 		{
-			fGlowIsAppearing = true;
+			fGlowIsAppearing = bIsGlowEnabled;
 		}
 
 		fLastPosVSNegBalance = fNewPosVSNegBalance;
