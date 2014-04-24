@@ -207,12 +207,12 @@ Bubbles.prototype.styleForBubble = function( radius, color, balance )
 				{
 					inside:
 					{
-						strokeStyle: 'rgba(195, 195, 195, 1)',
+						strokeStyle: 'rgba(60, 60, 60, 1)',
 						lineWidth: 2
 					},
 					outside:
 					{
-						strokeStyle: 'rgba(0, 0, 0, 1)',
+						strokeStyle: 'rgba(255, 255, 255, 1)',
 						lineWidth: 4
 					}
 				}

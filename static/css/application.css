@@ -244,7 +244,7 @@ border-radius: 16px;
 content: "";
 position: absolute;
 top: 25%;
-left: -9px;
+left: -8px;
 border-style: solid;
 border-width: 9px 9px 9px 0;
 border-color: transparent #000000;
@@ -259,7 +259,7 @@ content: "";
 position: absolute;
 margin-top:-3px;
 top: 25%;
-left: -12px;
+left: -11px;
 border-style: solid;
 border-width: 12px 12px 12px 0;
 border-color: transparent #7F7F7F;
@@ -275,7 +275,7 @@ z-index: 0;
 .rg-1:after{border-color: transparent black;}
 
 .rg-2{ border-color: rgb( 51, 102, 204 ); }
-.rg-2:before{ border-color: rgb( 51, 102, 204 );}
+.rg-2:before{ border-color: transparent rgb( 51, 102, 204 );}
 .rg-2:after{ border-color: transparent black;}
 
 .rg-3{ border-color: rgb( 0, 188, 251 );}
