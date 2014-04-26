@@ -24,6 +24,8 @@ Physics.behavior('battle-behavior', function( parent ){
 		// apply an acceleration (up/down) based on the Y distance to battle field
 		behave: function( data ){
 			var iTotalBubbles = this.PushLeftCount + this.PushRightCount;
+
+			var iBubblesAverageRadius = 0;
 			
 			if( iTotalBubbles > 0 )
 			{
@@ -74,6 +76,8 @@ Physics.behavior('battle-behavior', function( parent ){
 							{
 								body.geometry.radius = body.geometry.radius * bubleSizeMultiplierStep;
 								body.view = null;
+								body.options.styles = bubblesWorld.styleForBubble( body.geometry.radius,
+									body.color, body.balance );
 								this.world.removeBody( aMergeCandidates[ j ] );
 								aMergeCandidates.splice( j, 1 );
 								--iMergeCandidatesCount;
@@ -148,6 +152,7 @@ Physics.behavior('battle-behavior', function( parent ){
 					body.applyForce( vDeltaForce );
 					var fFinalSpeed = Math.min( body.state.vel.norm(), this.maxSpeed / 100 );
 					body.state.vel.normalize().mult( fFinalSpeed );
+
 				}
 				
 				var iMaxLinePos = Math.min( resx - resx / 10, this.battleLine.state.pos.get( 0 ) + 0.05 );

@@ -10,6 +10,7 @@
 
 // General variables
 world = Physics();
+bubblesWorld = 0;
 resx = 640;
 resy = 480;
 pxmin = 0;
@@ -30,7 +31,11 @@ balance = 0.1;
 fAngleStep = 2 * 3.1415;
 fCurrentAngle = 0;
 fLastPosVSNegBalance = 0;
+fGlowIsAppearing = false;
+fGlowAppearSpeed = 0.0001;
+fGlowDisappearSpeed = 0.000001;
 fGlowVisibility = 0;
+bIsGlowEnabled = false;
 
 function Bubbles(config)
 {
@@ -43,6 +48,8 @@ function Bubbles(config)
 		height: config.height,        // canvas height
 		meta: false        // setting it to "true" will display FPS
 	});
+
+	bubblesWorld = this;
 
 	baseRadius = baseRadius * config.width / 640;
 
@@ -139,9 +146,9 @@ function Bubbles(config)
 		var fNewPosVSNegBalance = iRightMult - iLeftMult;
 		if( fLastPosVSNegBalance < 0 && fNewPosVSNegBalance >= 0 )
 		{
-			fGlowVisibility = 100;
+			fGlowIsAppearing = bIsGlowEnabled;
 		}
-		fGlowVisibility = 100;
+
 		fLastPosVSNegBalance = fNewPosVSNegBalance;
 
 		this.battleLineTargetPosition = this.width / 2;
@@ -161,8 +168,59 @@ Bubbles.prototype.render = function()
 Bubbles.prototype.timestep = function(time,dt)
 {
 	world.step(time);
-	$("#pushRightGlowIndicator")[0].style.opacity = fGlowVisibility + '%';
-	//fGlowVisibility = Math.max( 0, fGlowVisibility - ( time * 0.00001 ) );
+	var div = $("#pushRightGlowIndicator")[0];
+	div.style.opacity = fGlowVisibility;
+	div.style.filter = "alpha(opacity=(" + ( fGlowVisibility * 100 ) + ")";
+
+	if( fGlowIsAppearing && fGlowVisibility < 1 )
+	{
+		fGlowVisibility = Math.min( 1, fGlowVisibility + time * fGlowAppearSpeed );
+		fGlowIsAppearing = fGlowVisibility < 1;
+	}
+	else if( !fGlowIsAppearing && fGlowVisibility > 0 )
+	{
+		fGlowVisibility = Math.max( 0, fGlowVisibility - time * fGlowDisappearSpeed );
+	}
+}
+
+Bubbles.prototype.styleForBubble = function( radius, color, balance )
+{
+	if( !this.bubbleStyles )
+	{
+		this.bubbleStyles = new Array();
+	}
+
+	var strStyleID = radius + color + balance;
+	if( typeof( this.bubbleStyles[ strStyleID ] ) == "undefined" )
+	{
+		this.bubbleStyles[ strStyleID ] =
+		{			
+			'circle' :
+			{
+				strokeStyle: color,
+				lineWidth: 1,
+				padding: 1,
+				isPositive: balance >= 0,
+				fillStyle: color,
+				angleIndicator: false,
+				sign:
+				{
+					inside:
+					{
+						strokeStyle: 'rgba(60, 60, 60, 1)',
+						lineWidth: 2
+					},
+					outside:
+					{
+						strokeStyle: 'rgba(255, 255, 255, 1)',
+						lineWidth: 4
+					}
+				}
+			}
+		};
+	}
+
+	return this.bubbleStyles[ strStyleID ];
 }
 
 Bubbles.prototype.step = function()
@@ -178,29 +236,12 @@ Bubbles.prototype.step = function()
 				restitution:0.2,
 				mass: 1,
 				maxSpeed: Math.random() * 10 - 5 + 15,
-				styles:
-					{				
-					'circle' : {
-						strokeStyle: newBubblesColor,
-						lineWidth: 1,
-						padding: 1,
-						isPositive: balance >= 0,
-						fillStyle: newBubblesColor,
-						angleIndicator: false,
-						sign: {
-							inside: {
-								strokeStyle: 'rgba(195, 195, 195, 1)',
-								lineWidth: 2
-							},
-							outside: {
-								strokeStyle: 'rgba(0, 0, 0, 1)',
-								lineWidth: 4
-							}
-						}
-					}
-				}
+				styles: bubblesWorld.styleForBubble( baseRadius, newBubblesColor, balance )
 			} );
 
+			bubble.color = newBubblesColor;
+			bubble.balance = balance;
+			bubble.state.scale = 1;
 			bubble.age = 0;
 			bubble.seed = Math.random() * 100;
 			bubble.isPushLeft = balance < 0;

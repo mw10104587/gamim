@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Python Websockets Chat Demo</title>
+    <title>Demonstration for CHIPlay 2014</title>
     <link href="static/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="static/css/application.css" rel="stylesheet" media="screen">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,8 +15,13 @@
     <div class="container">
       <div class="header-box">
         <p style="font-size: 12px" class="lh">Test for CHIPlay version2 part 1</p>
+
         <p style="font-size: 14px; font-weight: bold" class="lh">GamIM: Affecting Chatting Behavior by Visualizing Atmosphere of Conversation</p>
-        <p style="font-size: 12px" class="lh">Ke-Chen Pong, Chi-An Wang and Shuo-Hsiu HSU</p>
+        <ul style="font-size: 12px" class="lh"><li>Ke-Chen Pong</li>
+<li>Chi-an Wang</li>
+<li>Marla Saavedra</li>
+<li>Vincent Adhenet</li>
+<li>Shuo-hsiu Hsu</li></ul>
 
       </div>
 
@@ -35,7 +40,8 @@
       <canvas id="bubblesContainer">
       </canvas>
       <div id="chat-overlay">
-	<div id="pushRightIndicator"><p>0</p><div id="pushRightGlowIndicator"></div></div>
+	<div id="pushRightGlowIndicator"></div>
+	<div id="pushRightIndicator"><p>0</p></div>
 	<div id="pushLeftIndicator"><p>0</p></div>
       </div>
 
@@ -90,10 +96,24 @@
 				}
 			};
 
-			/*dhtmlxEvent(window,"load",jr);*/
+			dhtmlxEvent(window,"load",jr);
 		</script>
 
 		<h2>Visual parameters</h2>
+		<h3>Color chart</h3>
+		<div style="height:30px; width:100%;">
+			<div class="chartItem rg-1"></div>
+			<div class="chartItem rg-2"></div>
+			<div class="chartItem rg-3"></div>
+			<div class="chartItem rg-4"></div>
+			<div class="chartItem rg-5"></div>
+			<div class="chartItem rg-6"></div>
+			<div class="chartItem rg-7"></div>
+			<div class="chartItem rg-8"></div>
+			<div class="chartItem rg-9"></div>
+			<div class="chartItem rg-10"></div>
+			<div class="chartItem rg-11"></div>
+		</div>
 		<h3>Max bubble count</h3>
 		<input type="text" id="maxBubblesInput" value="0"
 					onchange="updateSlider('maxBubbles',this.value)">

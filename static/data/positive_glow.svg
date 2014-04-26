@@ -7,6 +7,7 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="66.821426"
@@ -17,6 +18,17 @@
    sodipodi:docname="positive_glow.svg">
   <defs
      id="defs4">
+    <linearGradient
+       id="linearGradient3817">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0"
+         id="stop3819" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0;"
+         offset="1"
+         id="stop3821" />
+    </linearGradient>
     <filter
        id="filter3087"
        inkscape:label="Simple blur"
@@ -27,6 +39,17 @@
          id="feGaussianBlur3089"
          stdDeviation="3" />
     </filter>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3817"
+       id="radialGradient3823"
+       cx="0.75761437"
+       cy="0.50663924"
+       fx="0.75761437"
+       fy="0.50663924"
+       r="32.82225"
+       gradientTransform="matrix(1.4331002,1.4136619,-1.2077562,1.2243368,0.28377377,-1.0583684)"
+       gradientUnits="userSpaceOnUse" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -37,9 +60,9 @@
      inkscape:pageshadow="2"
      inkscape:zoom="3.959798"
      inkscape:cx="45.495722"
-     inkscape:cy="5.7483235"
+     inkscape:cy="35.164102"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer2"
      showgrid="false"
      fit-margin-top="5"
      fit-margin-left="5"
@@ -66,43 +89,17 @@
      inkscape:label="Calque 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-275.16071,-310.64431)">
-    <g
-       id="g2986"
-       transform="matrix(1.2797619,0,0,1.2678571,-162.30417,85.06041)"
-       style="filter:url(#filter3087)">
-      <path
-         id="path2988"
-         d="m 367.938,189.069 c -8.283,0 -14.998,6.716 -14.998,15 0,8.284 6.715,15 14.998,15 8.285,0 15.002,-6.716 15.002,-15 0,-8.284 -6.716,-15 -15.002,-15 z m 0,25.914 c -6.027,0 -10.912,-4.887 -10.912,-10.914 0,-6.027 4.885,-10.914 10.912,-10.914 6.027,0 10.914,4.886 10.914,10.914 0,6.028 -4.886,10.914 -10.914,10.914 z"
-         inkscape:connector-curvature="0"
-         style="fill:#efefef" />
-      <circle
-         id="circle2990"
-         r="2.3989999"
-         cy="202.26199"
-         cx="362.77301"
-         sodipodi:cx="362.77301"
-         sodipodi:cy="202.26199"
-         sodipodi:rx="2.3989999"
-         sodipodi:ry="2.3989999"
-         style="fill:#efefef"
-         d="m 365.17201,202.26199 c 0,1.32493 -1.07407,2.399 -2.399,2.399 -1.32493,0 -2.399,-1.07407 -2.399,-2.399 0,-1.32493 1.07407,-2.399 2.399,-2.399 1.32493,0 2.399,1.07407 2.399,2.399 z" />
-      <circle
-         id="circle2992"
-         r="2.4000001"
-         cy="202.26199"
-         cx="373.10599"
-         sodipodi:cx="373.10599"
-         sodipodi:cy="202.26199"
-         sodipodi:rx="2.4000001"
-         sodipodi:ry="2.4000001"
-         style="fill:#efefef"
-         d="m 375.50599,202.26199 c 0,1.32549 -1.07452,2.4 -2.4,2.4 -1.32549,0 -2.4,-1.07451 -2.4,-2.4 0,-1.32548 1.07451,-2.4 2.4,-2.4 1.32548,0 2.4,1.07452 2.4,2.4 z" />
-      <path
-         id="path2994"
-         d="m 371.696,208.699 c -1.059,0.782 -2.348,1.247 -3.758,1.247 -1.41,0 -2.699,-0.465 -3.756,-1.247 -0.441,-0.33 -1.068,-0.236 -1.396,0.206 -0.33,0.444 -0.236,1.069 0.205,1.399 1.377,1.025 3.094,1.643 4.947,1.643 1.853,0 3.57,-0.618 4.949,-1.643 0.441,-0.33 0.533,-0.956 0.205,-1.399 -0.329,-0.442 -0.954,-0.534 -1.396,-0.206 z"
-         inkscape:connector-curvature="0"
-         style="fill:#efefef" />
-    </g>
+     transform="translate(-275.16071,-310.64431)" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="dégradé">
+    <rect
+       style="fill:url(#radialGradient3823);fill-rule:evenodd;stroke:none;stroke-width:1.01541674000000004px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1"
+       id="rect3039"
+       width="65.644501"
+       height="65.39196"
+       x="0.76532274"
+       y="0.64064771" />
   </g>
 </svg>

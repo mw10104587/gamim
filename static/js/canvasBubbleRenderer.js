@@ -234,6 +234,13 @@ Physics.renderer('canvasBubbles', function( proto ){
          */
         createView: function( geometry, styles ){
 
+        	styles = styles ? styles[ geometry.name ] : this.options.styles[ geometry.name ];
+
+		if( styles && styles.view )
+		{
+			return styles.view;
+		}
+
             var view = new Image()
                 ,aabb = geometry.aabb()
                 ,hw = aabb.halfWidth + Math.abs(aabb.pos.x)
@@ -242,10 +249,7 @@ Physics.renderer('canvasBubbles', function( proto ){
                 ,y = hh + 1
                 ,hiddenCtx = this.hiddenCtx
                 ,hiddenCanvas = this.hiddenCanvas
-                ,name = geometry.name
-                ;
-
-            styles = styles ? styles[ name ] : this.options.styles[ name ];
+                ,name = geometry.name;
 
             x += styles.lineWidth | 0;
             y += styles.lineWidth | 0;
@@ -299,6 +303,12 @@ Physics.renderer('canvasBubbles', function( proto ){
             view.src = hiddenCanvas.toDataURL("image/png");
             view.width = hiddenCanvas.width;
             view.height = hiddenCanvas.height;
+
+	    if( styles )
+	    {
+		styles.view = view;
+	    }
+
             return view;
         },
 
@@ -341,7 +351,13 @@ Physics.renderer('canvasBubbles', function( proto ){
             ctx.save();
             ctx.translate(pos.get(0) + offset.get(0), pos.get(1) + offset.get(1));
             //ctx.rotate(body.state.angular.pos);
-            ctx.drawImage(view, -view.width/2, -view.height/2);
+            //ctx.scale(body.state.scale);
+	    if( !view.halfWidth )
+	    {
+		view.halfWidth = view.width/2;
+		view.halfHeight = view.height/2;
+	    }
+            ctx.drawImage(view, -view.halfWidth, -view.halfHeight);
             ctx.restore();
 
             if ( this.options.debug ){
