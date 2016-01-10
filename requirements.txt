@@ -11,4 +11,4 @@ gunicorn==19.3.0
 redis==2.10.5
 https://pypi.python.org/packages/source/w/ws4py/ws4py-0.3.4.zip
 git+git://github.com/abeisgreat/python-firebasin.git
-git+git://github.com/ozgur/python-firebase.gitpip
+git+git://github.com/ozgur/python-firebase.git
