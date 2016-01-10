@@ -7,11 +7,11 @@ Chat Server
 This application uses WebSockets to run a primitive chat server.
 """
 
-import os
+import os, urlparse, redis
 import sys
 import json
 import logging
-import redis
+
 import gevent
 
 from flask import Flask, render_template
@@ -24,7 +24,7 @@ import json
 
 import subprocess
 import shlex
-import firebasin
+from firebase import firebase
 from datetime import datetime
 
 def RateSentiment(sentiString):
@@ -48,14 +48,20 @@ sys.stdout.flush()
 #    return classifier1.classify(word_feats( chat.split() ))
 
 
-REDIS_URL = os.environ['REDISCLOUD_URL']
+REDIS_URL = os.environ.get('REDISCLOUD_URL')
 REDIS_CHAN = 'gamimtest'
 
 app = Flask(__name__)
 app.debug = 'DEBUG' in os.environ
 
 sockets = Sockets(app)
-redis = redis.from_url(REDIS_URL)
+
+
+# redis = redis.from_url(REDIS_URL)
+
+url = urlparse.urlparse(os.environ.get('REDISCLOUD_URL'))
+my_redis = redis.Redis(host=url.hostname, port=url.port, password=url.password)
+
 """redis is used to save key-value pairs.."""
 
 
@@ -64,9 +70,9 @@ class ChatBackend(object):
 
     def __init__(self):
         self.clients = list()
-        self.pubsub = redis.pubsub()
+        self.pubsub = my_redis.pubsub()
         self.pubsub.subscribe(REDIS_CHAN)
-        self.firebase = firebasin.Firebase("https://gamim-test1.firebaseio.com/")
+        self.firebase = firebas.FirebaseApplication("https://gamim-test1.firebaseio.com/", None)
 
     def __iter_data(self):
         for message in self.pubsub.listen():
@@ -100,12 +106,12 @@ class ChatBackend(object):
 
     def saveToFirebase(self, name, content, emotionValue):
 
-        self.firebase.push({"name": name, "content": content, "emotionValue": emotionValue, "time":str(datetime.now() )})
-
+        result = self.firebase.post({"name": name, "content": content, "emotionValue": emotionValue, "time":str(datetime.now() )})
+        print "Save to Firebase"
+        print result
 
 chats = ChatBackend()
 chats.start()
-
 
 
 @app.route('/')
@@ -119,8 +125,6 @@ def inbox(ws):
         # Sleep to prevent *contstant* context-switches.
         gevent.sleep(0.1)
         message = ws.receive()
-        #print message
-        #sys.stdout.flush()
 	
         if message:
             jsonMessage = json.loads(message)
@@ -140,7 +144,7 @@ def inbox(ws):
             sys.stdout.flush()
             app.logger.info(u'Inserting message: {}'.format(message))
             #post the message to given channel
-            redis.publish(REDIS_CHAN, message)
+            my_redis.publish(REDIS_CHAN, message)
             chats.saveToFirebase( name, text, emotionV )
 
 def getEmotionValueFrom(pos, neg):
