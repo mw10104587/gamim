@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Demonstration for CHIPlay 2014</title>
+    <link href="static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="static/css/application.css" rel="stylesheet" media="screen">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="static/dhtmlxslider/dhtmlxslider.css" rel="stylesheet" media="screen">
+    <script type="text/javascript" src="static/dhtmlxslider/dhtmlxcommon.js"></script>
+    <script type="text/javascript" src="static/dhtmlxslider/dhtmlxslider.js"></script>
+    <script>window.dhx_globalImgPath="static/dhtmlxslider/imgs/";</script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header-box">
+        <p style="font-size: 12px" class="lh">Test for CHIPlay version2 part 1</p>
+
+        <p style="font-size: 14px; font-weight: bold" class="lh">GamIM: Affecting Chatting Behavior by Visualizing Atmosphere of Conversation</p>
+        <ul style="font-size: 12px" class="lh"><li>Ke-Chen Pong</li>
+<li>Chi-an Wang</li>
+<li>Marla Saavedra</li>
+<li>Vincent Adhenet</li>
+<li>Shuo-hsiu Hsu</li></ul>
+
+      </div>
+
+      <div id="input-name-form">
+         <div class="input-group" style="width: 250px;">
+            <input id="input-name" type="text" class="form-control" placeholder="Enter name" >
+            <div class="input-group-btn">
+              <button id="name-confirm-btn" type="button" class="btn btn-default" onclick="nameConfirm()">Confirm</button>
+            </div>
+          </div>
+      </div>
+
+      <div id="chat-text">
+	<div id="chat-bottom-pusher"></div>
+      </div>
+      <canvas id="bubblesContainer">
+      </canvas>
+      <div id="chat-overlay">
+	<div id="pushRightGlowIndicator"></div>
+	<div id="pushRightIndicator"><p>0</p></div>
+	<div id="pushLeftIndicator"><p>0</p></div>
+      </div>
+
+      <div id="visuals_parameters">
+		<script>
+			var slMaxBubbles;
+			var slBubblesMergeMultiplier;
+
+			function jr(){
+				var $_GET = {},
+				args = location.search.substr(1).split(/&/);
+				for (var i=0; i<args.length; ++i) {
+				    var tmp = args[i].split(/=/);
+				    if (tmp[0] != "") {
+					$_GET[decodeURIComponent(tmp[0])] = decodeURIComponent(tmp.slice(1).join("").replace("+", " "));
+				    }
+				}
+
+				$("#visuals_parameters")[0].style.display = $_GET["params"] == "true" ? "block" : "none";
+				
+				slMaxBubbles=new dhtmlxSlider("maxBubblesSlide", 250, "dhx_skyblue", false, 0, 500, visualBubbles.behavior.maxBubbles, 1);
+				slMaxBubbles.attachEvent("onChange",function(nv){
+					document.getElementById("maxBubblesInput").value=nv;
+					visualBubbles.behavior.maxBubbles = nv;
+				});
+				slMaxBubbles.init();
+				document.getElementById("maxBubblesInput").value=visualBubbles.behavior.maxBubbles; 
+
+				slBubblesMergeMultiplier=new dhtmlxSlider("bubblesMergeMultiplierSlide", 250, "dhx_skyblue", false, 0,
+					10, bubleSizeMultiplierStep, 0.05);
+				slBubblesMergeMultiplier.attachEvent("onChange",function(nv){
+					document.getElementById("bubblesMergeMultiplierInput").value=nv;
+					bubleSizeMultiplierStep = nv;
+				});
+				slBubblesMergeMultiplier.init();
+				document.getElementById("bubblesMergeMultiplierInput").value=bubleSizeMultiplierStep; 
+			};
+
+			function updateSlider(cd,val){
+				if(isNaN(Number(val)))
+					return;
+
+				if(cd=='maxBubbles')
+				{
+					slMaxBubbles.setValue(val);
+					visualBubbles.behavior.maxBubbles = val;
+				}
+				if(cd=='bubblesMergeMultiplier')
+				{
+					slBubblesMergeMultiplier.setValue(val);
+					bubleSizeMultiplierStep = val;
+				}
+			};
+
+			dhtmlxEvent(window,"load",jr);
+		</script>
+
+		<h2>Visual parameters</h2>
+		<h3>Color chart</h3>
+		<div style="height:30px; width:100%;">
+			<div class="chartItem rg-1"></div>
+			<div class="chartItem rg-2"></div>
+			<div class="chartItem rg-3"></div>
+			<div class="chartItem rg-4"></div>
+			<div class="chartItem rg-5"></div>
+			<div class="chartItem rg-6"></div>
+			<div class="chartItem rg-7"></div>
+			<div class="chartItem rg-8"></div>
+			<div class="chartItem rg-9"></div>
+			<div class="chartItem rg-10"></div>
+			<div class="chartItem rg-11"></div>
+		</div>
+		<h3>Max bubble count</h3>
+		<input type="text" id="maxBubblesInput" value="0"
+					onchange="updateSlider('maxBubbles',this.value)">
+		<div id="maxBubblesSlide"></div>
+		<h3>Bubble merge multiplier</h3>
+		<input type="text" id="bubblesMergeMultiplierInput" value="0"
+					onchange="updateSlider('bubblesMergeMultiplier',this.value)">
+		<div id="bubblesMergeMultiplierSlide"></div>
+      </div>
+
+      <!--form id="input-form" class="form-inline"-->
+      <form id="input-form">
+        <div class="form-group">
+          <input id="input-text" type="text" class="form-control" placeholder="Enter chat text here!" autofocus />
+          <div class="btn-wrapper">
+            <button class="btn btn-primary" id="input-text-btn" type="submit">Send</button>
+          </div>
+        </div>
+        
+      </form>
+    </div>
+
+    <script type="text/javascript" src="static/js/three.min.js"></script>
+    <script type="text/javascript" src="static/js/jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" src="static/js/reconnecting-websocket.min.js"></script>
+    <script type="text/javascript" src="static/js/physicsjs-full.js"></script>
+    <script type="text/javascript" src="static/js/battle-behavior.js"></script>
+    <script type="text/javascript" src="static/js/bubblefight.js"></script>
+    <script type="text/javascript" src="static/js/canvasBubbleRenderer.js"></script>
+    <script type="text/javascript" src="static/js/threeBubbleRenderer.js"></script>
+    <script type="text/javascript" src="static/js/application.js"></script>
+  </body>
+</html>
