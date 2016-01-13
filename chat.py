@@ -156,8 +156,8 @@ def inbox(ws):
     # ws means web socket
     # Receives incoming chat messages, inserts them into Redis.
 
-    while not ws.closed:
-    # while ws.socket is not None:
+    # while not ws.closed:
+    while ws.socket is not None:
         # Sleep to prevent *constant* context-switches.
         gevent.sleep(0.1)
         message = ws.receive()
@@ -200,8 +200,8 @@ def outbox(ws):
     # Sends outgoing chat messages, via `ChatBackend`.
     chats.register(ws)
 
-    while not ws.closed:
-    # while not ws.socket is not None:
+    # while not ws.closed:
+    while not ws.socket is not None:
         # Context switch while `ChatBackend.start` is running in the background.
         gevent.sleep()
 
