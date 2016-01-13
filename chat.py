@@ -157,7 +157,8 @@ def inbox(ws):
     # Receives incoming chat messages, inserts them into Redis.
 
     # while not ws.closed:
-    while ws.socket is not None:
+    # while ws.socket is not None:
+    while True:
         # Sleep to prevent *constant* context-switches.
         gevent.sleep(0.1)
         message = ws.receive()
@@ -172,19 +173,26 @@ def inbox(ws):
             
             pos_value = int(sentistrength_result[:1])
             neg_value = int(sentistrength_result[2:])
-            emotion_value = getEmotionValueFrom( pos_value, neg_value)  
-            message = message.replace("}", ',\"' + 'length\":\"' + str( getLengthOfMessage(message) )+ '\"' + ',\"' + 'neg\":\"' + sentistrength_result[2:] + '\"' + ',\"' + 'pos\":\"' + sentistrength_result[:1] + '\"' + '}' )
+            emotion_value = getEmotionValueFrom( pos_value, neg_value) 
 
-            print message
+            print message 
+
+            # message = message.replace("}", ',\"' + 'length\":\"' + str( getLengthOfMessage(message) )+ '\"' + ',\"' + 'neg\":\"' + sentistrength_result[2:] + '\"' + ',\"' + 'pos\":\"' + sentistrength_result[:1] + '\"' + '}' )
+            
+            jsonMessage["length"] = str( getLengthOfMessage(message) )
+            jsonMessage["neg"] = sentistrength_result[2:]
+            jsonMessage["pos"] = sentistrength_result[:1]
+
+            print json.dumps(jsonMessage, indent=4)
 
             # print and flush
             # print emotion_value
             sys.stdout.flush()
 
-            app.logger.info(u'Inserting message: {}'.format(message))
+            app.logger.info(u'Inserting message: {}'.format(json.dumps(jsonMessage) ))
 
             #post the message to redis channel
-            my_redis.publish(REDIS_CHANNEL, message)
+            my_redis.publish(REDIS_CHANNEL, json.dumps(jsonMessage) )
 
             # save the chat message to firebase
             chats.saveToFirebase( name, text, emotion_value )
@@ -201,7 +209,8 @@ def outbox(ws):
     chats.register(ws)
 
     # while not ws.closed:
-    while not ws.socket is not None:
+    # while not ws.socket is not None:
+    while True:
         # Context switch while `ChatBackend.start` is running in the background.
         gevent.sleep()
 
