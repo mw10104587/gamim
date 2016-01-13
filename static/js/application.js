@@ -184,6 +184,9 @@ $("#input-form").on("submit", function(event) {
   var text   = $("#input-text")[0].value;
 
   //we stringify it because it only support string.
+
+  var output_string = JSON.stringify({ handle: handle, text: text });
+  console.log(output_string);
   outbox.send(JSON.stringify({ handle: handle, text: text }));
   $("#input-text")[0].value = "";
   //console.log(stringifyText);
