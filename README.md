@@ -1,11 +1,4 @@
 
-# Python Websockets Example: Chat
+# Gamim, an emotio chatroom
 
-This is a simple application that serves tasty WebSockets to your users
-with Flask, Flask-Sockets, Gevent, and Gunicorn.
-
-Mmmm.
-
-emotion-chat
-
-GamIM research
+This is chatroom that uses Flask, Flask-Sockets, Gevent, and Gunicorn.
