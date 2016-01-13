@@ -160,9 +160,8 @@ inbox.onclose = function(){
 
 };
 
-outbox.onclose = function(){
+outbox.onopen = function(){
   console.log("outbox opened");
-
 }
 
 outbox.onclose = function(){

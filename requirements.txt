@@ -1,10 +1,13 @@
 Cython==0.19.2
 werkzeug
-gevent==0.13.8
+#gevent==0.13.8
+gevent
 gevent-websocket==0.3.6
-greenlet==0.4.1
+#greenlet==0.4.1
+greenlet
 Flask==0.10.1
-Flask-Sockets==0.1
+#Flask-Sockets==0.1
+Flask-Sockets
 Jinja2==2.7.1
 MySQL-python==1.2.3
 gunicorn==19.3.0
