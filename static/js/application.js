@@ -1,8 +1,8 @@
 //hostname which is emotion-chat-v1.herokuapp
 
 console.log(location.host);
-var inbox = new ReconnectingWebSocket("ws://"+ location.host + "/receive");
-var outbox = new ReconnectingWebSocket("ws://"+ location.host + "/submit");
+var inbox = new ReconnectingWebSocket("wss://"+ location.host + "/receive");
+var outbox = new ReconnectingWebSocket("wss://"+ location.host + "/submit");
 
 function computedStyle(pelem)
 {
