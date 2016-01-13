@@ -1,9 +1,10 @@
 //hostname which is emotion-chat-v1.herokuapp
 
-console.log(location.host);
-var inbox = new ReconnectingWebSocket("wss://" + location.host + "/receive", null, {debug: true, recoonectInterval: 500});
-var outbox = new ReconnectingWebSocket("wss://" + location.host + "/submit", null, {debug: true, recoonectInterval: 500});
+// console.log(location.host);
 
+// update from ws -> wss to remove client side ssl error, because modern browsers support https right now...
+var inbox = new ReconnectingWebSocket("wss://" + location.host + "/receive", null, {debug: false, recoonectInterval: 500});
+var outbox = new ReconnectingWebSocket("wss://" + location.host + "/submit", null, {debug: false, recoonectInterval: 500});
 
 
 function computedStyle(pelem)
@@ -35,17 +36,17 @@ if( bInverseLeftAndRight )
 //receiving a message
 //get data and show in chat box
 inbox.onmessage = function(message) {
-  console.log(message);
+  // console.log(message);
   var data = JSON.parse(message.data);
   var name = data.handle;
   var content = data.text;
   var textLength = parseInt(data.length);
-  console.log(textLength);
+  // console.log(textLength);
  
   var negP = parseFloat(data.neg);
-  console.log(data.neg);
+  // console.log(data.neg);
   var posP = parseFloat(data.pos);
-  console.log(posP);
+  // console.log(posP);
   /*
   var emotionRangeClassString = ""
     if (     negP > 0     && negP < 1/11 )  
@@ -101,7 +102,7 @@ inbox.onmessage = function(message) {
       emotionRangeClassString = "rg-6";
     }
 
-  console.log(emotionRangeClassString);
+  // console.log(emotionRangeClassString);
 
 	var bubblesColor = 'black';
 	var fX = 0.45;
@@ -125,7 +126,7 @@ inbox.onmessage = function(message) {
 	var chatDiv = $("#chat-text")[0];
 	var divLastChatWindow;
 	$("#chat-text div.bubble-span-panel").each( function(){
-		console.log("Chat div height : " + $(this).height() );
+		// console.log("Chat div height : " + $(this).height() );
 		childrenHeightSum = childrenHeightSum + $(this).outerHeight( true );
 	});
 
@@ -141,8 +142,8 @@ inbox.onmessage = function(message) {
 	fWidth = divLastChatWindow.clientWidth / chatDiv.clientWidth;
 	fHeight = divLastChatWindow.clientHeight / chatDiv.clientHeight;
 
-	console.log('bubbles color : ' + bubblesColor );
-	console.log('bubbles generation rect : ' + fX + ';' + fY + ' ' + fWidth + 'x' + fHeight );
+	// console.log('bubbles color : ' + bubblesColor );
+	// console.log('bubbles generation rect : ' + fX + ';' + fY + ' ' + fWidth + 'x' + fHeight );
 	visualBubbles.generateBubbles( posP - negP, bubblesColor, textLength, fX, fY, fX + fWidth, fY + fHeight );
 
   
@@ -188,7 +189,7 @@ $("#input-form").on("submit", function(event) {
   //we stringify it because it only support string.
 
   var output_string = JSON.stringify({ handle: handle, text: text });
-  console.log(output_string);
+  // console.log(output_string);
   outbox.send(JSON.stringify({ handle: handle, text: text }));
   $("#input-text")[0].value = "";
   //console.log(stringifyText);
