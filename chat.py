@@ -134,8 +134,11 @@ sockets = Sockets(app)
 
 # redis is a db service to save key-value pairs."
 # redis = redis.from_url(REDIS_URL)
-url = urlparse.urlparse(REDIS_URL)
-my_redis = redis.Redis(host=url.hostname, port=url.port, password=url.password)
+
+# url = urlparse.urlparse(REDIS_URL)
+# my_redis = redis.Redis(host=url.hostname, port=url.port, password=url.password)
+
+my_redis = redis.from_url(REDIS_URL)
 
 chats = ChatBackend()
 chats.start()

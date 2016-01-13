@@ -1,8 +1,8 @@
 //hostname which is emotion-chat-v1.herokuapp
 
 console.log(location.host);
-var inbox = new ReconnectingWebSocket("wss://"+ location.host + "/receive");
-var outbox = new ReconnectingWebSocket("wss://"+ location.host + "/submit");
+var inbox = new ReconnectingWebSocket("wss://" + location.host + "/receive");
+var outbox = new ReconnectingWebSocket("wss://" + location.host + "/submit");
 
 function computedStyle(pelem)
 {
@@ -149,6 +149,8 @@ inbox.onmessage = function(message) {
   }, 800);
 };
 
+
+/*
 inbox.onopen = function(){
   console.log("inbox opened");
 
@@ -167,7 +169,7 @@ outbox.onopen = function(){
 outbox.onclose = function(){
     console.log('outbox closed');
     this.outbox = new WebSocket(outbox.url);
-};
+};*/
 
 
 //send message to server when submit button pressed.
